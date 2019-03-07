@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.user.services;
+package com.bridgelabz.fundoo.user.service;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -41,6 +41,9 @@ public class UserServicesImpl implements UserServices {
 	@Autowired
 	private Response response;
 	
+	@Autowired
+	private MessageServiceImpl messageServiceImpl;
+	
 	//Response response =new Response();
 
 	
@@ -62,7 +65,7 @@ public class UserServicesImpl implements UserServices {
 		//To check user is available or not
 		if(useravailable.isPresent())
 		{
-			throw new UserException("Dublicate user found");
+			throw new UserException(environment.getProperty("status.register.dublicateUser"));
 		}
 		
 		//Copy user data userDTO to user class
@@ -76,9 +79,10 @@ public class UserServicesImpl implements UserServices {
 		//save user data in data base
 	    user = userRepository.save(user);
 	    
-	    EmailUtil.send(user.getEmail(), "mail for Registration", getUrl(user.getuserId()));
-	    response.setStatusCode(100);
-	    response.setStatusMessage(environment.getProperty("1"));
+//	    EmailUtil.send(user.getEmail(), environment.getProperty("status.register.mailForRegistration"), getUrl(user.getuserId()));
+	    messageServiceImpl.sendEmail(user);
+	    response.setStatusCode(environment.getProperty("status.success.code"));
+	    response.setStatusMessage(environment.getProperty("status.register.successful"));
 	    return response;
 	}
 	
@@ -88,17 +92,24 @@ public class UserServicesImpl implements UserServices {
 		Optional<User> userAvailable = userRepository.findByEmail(loginuser.getEmail());
 		System.out.println("database password"+userAvailable.get().getPassword());
 		System.out.println("login user password"+passwordEncoder.encode(loginuser.getPassword()));
-		if(userAvailable.isPresent() && passwordEncoder.matches(loginuser.getPassword(),userAvailable.get().getPassword()) && userAvailable.get().isIsverification()) 
-		{ 
-			String generateToken = UserToken.generateToken(userAvailable.get().getuserId());
-			response.setStatusCode(3);
-			response.setStatusMessage(environment.getProperty("2"));
-			response.setToken(generateToken);
-			return response; 
-		} 
-		else 
-		{ 
-			throw new UserException("Email and Password is not found"); 
+		if(userAvailable.get().isIsverification())
+		{
+			if(userAvailable.isPresent() && passwordEncoder.matches(loginuser.getPassword(),userAvailable.get().getPassword())) 
+			{ 
+				String generateToken = UserToken.generateToken(userAvailable.get().getuserId());
+				response.setStatusCode(environment.getProperty("status.success.code"));
+				response.setStatusMessage(environment.getProperty("status.login.successful"));
+				response.setToken(generateToken);
+				return response; 
+			} 
+			else 
+			{ 
+				throw new UserException(environment.getProperty("status.login.unSuccessful")); 
+			}
+		}
+		else
+		{
+			throw new UserException(environment.getProperty("status.email.verify"));
 		}
 	}
 
@@ -106,10 +117,10 @@ public class UserServicesImpl implements UserServices {
 	public String validateEmailId(String token) throws Exception
 	{
 		Long id = UserToken.tokenVerify(token);
-		User user = userRepository.findById(id).orElseThrow(() -> new Exception("User not found")); 
+		User user = userRepository.findById(id).orElseThrow(() -> new Exception(environment.getProperty("status.email.user"))); 
 		user.setIsverification(true);
 		userRepository.save(user);
-		return "Successfully verified";
+		return environment.getProperty("status.email.userVerify");
 	}
 	
 	
@@ -125,14 +136,14 @@ public class UserServicesImpl implements UserServices {
 		if(userAvailable.isPresent()) 
 		{
 			User user = userAvailable.get();
-			EmailUtil.send(email, "Password Reset", Utility.getBody(user, "user"));
-			response.setStatusCode(300);
-			response.setStatusMessage(environment.getProperty("3"));
+			EmailUtil.send(email, environment.getProperty("status.password.reset"), Utility.getBody(user, "user"));
+			response.setStatusCode(environment.getProperty("status.success.code"));
+			response.setStatusMessage(environment.getProperty("status.password.successful"));
 			return response;
 		}
 		else 
 		{
-			throw new UserException("Email not found");
+			throw new UserException(environment.getProperty("status.password.email"));
 		}
 	}
 	
@@ -147,8 +158,8 @@ public class UserServicesImpl implements UserServices {
 			System.out.println(user.getPassword());
 			user.setAccountUpdateDate(LocalDate.now());
 			userRepository.save(user);
-			response.setStatusCode(400);
-			response.setStatusMessage(environment.getProperty("4"));
+			response.setStatusCode(environment.getProperty("status.success.code"));
+			response.setStatusMessage(environment.getProperty("status.password.resetpassword"));
 			return response;
 	}
 }

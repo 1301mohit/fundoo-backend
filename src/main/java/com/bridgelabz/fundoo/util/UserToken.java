@@ -16,7 +16,7 @@ public class UserToken {
 			Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
 			String token=JWT.create()
 							.withClaim("id", id)
-							.sign(algorithm);
+							.sign(algorithm);                           
 			return token;		
 		}
 		catch(Exception exception)

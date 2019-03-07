@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.note.services;
+package com.bridgelabz.fundoo.note.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +20,7 @@ import com.bridgelabz.fundoo.note.repository.NoteRepository;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
+import com.bridgelabz.fundoo.util.StatusUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 
 @Service
@@ -41,6 +42,9 @@ public class NoteServicesImpl implements NoteServices{
 	@Autowired
 	private Response response;
 	
+//	@Autowired
+//	private StatusUtil statusUtil; 
+	
 	static final Logger logger = LoggerFactory.getLogger(NoteServicesImpl.class);
 	
 	public Response create(NoteDto noteDto, String token) throws Exception {
@@ -55,8 +59,7 @@ public class NoteServicesImpl implements NoteServices{
 		note.setCreateStamp(LocalDateTime.now());
 		note.setLastModifiedStamp(LocalDateTime.now());
 		userRepository.save(user.get());
-		response.setStatusMessage(environment.getProperty("11"));
-		response.setStatusCode(201);
+		Response response = StatusUtil.statusInfo(environment.getProperty("11"), "201");
 		return response;
 	}
 	
@@ -82,9 +85,9 @@ public class NoteServicesImpl implements NoteServices{
 //		System.out.println("note1:"+note1.get());
 //		noteRepository.save(note1.get());
 		Long userId = UserToken.tokenVerify(token);
+		Optional<User> user = userRepository.findByUserId(userId);
 		noteRepository.save(note);
-		response.setStatusMessage(environment.getProperty("12"));
-		response.setStatusCode(202);
+		Response response = StatusUtil.statusInfo(environment.getProperty("11"), "201");
 		return response;	
 	}
 	
@@ -104,8 +107,7 @@ public class NoteServicesImpl implements NoteServices{
 		//note1.get().setTrash(true);
 		note.setTrash(true);
 		noteRepository.save(note);
-		response.setStatusMessage("Successfully note add to trash");
-		response.setStatusCode(21);
+		Response response = StatusUtil.statusInfo("Successfully note add to trash", "201");
 		return response;
 	}
 	
@@ -115,8 +117,7 @@ public class NoteServicesImpl implements NoteServices{
 		if(note.isTrash()) {
 			Long userId = UserToken.tokenVerify(token);
 			noteRepository.delete(note);
-			response.setStatusCode(22);
-			response.setStatusMessage("Delete note Successfully");
+			Response response = StatusUtil.statusInfo("Delete note Successfully", "201");
 			return response;
 		}
 		else {

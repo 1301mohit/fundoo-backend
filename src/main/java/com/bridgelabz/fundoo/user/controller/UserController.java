@@ -29,7 +29,7 @@ import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
-import com.bridgelabz.fundoo.user.services.UserServices;
+import com.bridgelabz.fundoo.user.service.UserServices;
 //import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.UserToken;

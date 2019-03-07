@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class Response {
 	
 	private String statusMessage;
-	private int statusCode;
+	private String statusCode;
 	private String token;
 	
 	public String getStatusMessage() {
@@ -19,10 +19,10 @@ public class Response {
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
 	}
-	public int getStatusCode() {
+	public String getStatusCode() {
 		return statusCode;
 	}
-	public void setStatusCode(int statusCode) {
+	public void setStatusCode(String statusCode) {
 		this.statusCode = statusCode;
 	}
 	public String getToken() {

@@ -23,35 +23,35 @@ public class FundooExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> globalExceptionHandler(Exception e)
 	{
-		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), 1000);
+		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), "1000");
 		return new ResponseEntity<Response>(statusInfo, HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(NoteException.class)
 	public ResponseEntity<Response> noteExceptionHandler(NoteException e)
 	{
-		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), 2000);
+		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), "2000");
 		return new ResponseEntity<Response>(statusInfo, HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(EmailException.class)
 	public ResponseEntity<Response> emailExceptionHandler(EmailException e)
 	{
-		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), 3000);
+		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), "3000");
 		return new ResponseEntity<Response>(statusInfo, HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(TokenException.class)
 	public ResponseEntity<Response> tokenExceptionHandler(TokenException e)
 	{
-		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), 4000);
+		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), "4000");
 		return new ResponseEntity<Response>(statusInfo, HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(UserException.class)
 	public ResponseEntity<Response> userExceptionHandler(UserException e)
 	{
-		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), 5000);
+		Response statusInfo = StatusUtil.statusInfo(e.getMessage(), "5000");
 		return new ResponseEntity<Response>(statusInfo, HttpStatus.OK);
 	}
 	

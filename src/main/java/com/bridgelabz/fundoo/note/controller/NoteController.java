@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.NoteDto;
 import com.bridgelabz.fundoo.note.model.Note;
-import com.bridgelabz.fundoo.note.services.NoteServices;
+import com.bridgelabz.fundoo.note.service.NoteServices;
 import com.bridgelabz.fundoo.response.Response;
 
 //import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class NoteController {
 		logger.info("noteDto:"+noteDto);
 		logger.trace("Create Note");
 		Response response = noteServices.create(noteDto, token);
-		return new ResponseEntity<Response>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){

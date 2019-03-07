@@ -14,6 +14,8 @@ import javax.persistence.Table;
 //import lombok.Getter;
 //import lombok.Setter;
 //import lombok.ToString;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Note_Details")
@@ -24,7 +26,10 @@ public class Note {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long noteId;
+	
+	@NotNull
 	private String title;
+	
 	private String description;
 	private LocalDateTime createStamp; //= LocalDate.now();
 	private LocalDateTime lastModifiedStamp; //= LocalDate.now();

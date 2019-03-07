@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.note.services;
+package com.bridgelabz.fundoo.note.service;
 
 import java.util.List;
 
