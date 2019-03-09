@@ -81,7 +81,7 @@ public class UserServicesImpl implements UserServices {
 	    
 //	    EmailUtil.send(user.getEmail(), environment.getProperty("status.register.mailForRegistration"), getUrl(user.getuserId()));
 	    messageServiceImpl.sendEmail(user);
-	    response.setStatusCode(environment.getProperty("status.success.code"));
+	    response.setStatusCode(environment.getProperty("status.code.success"));
 	    response.setStatusMessage(environment.getProperty("status.register.successful"));
 	    return response;
 	}
@@ -96,8 +96,8 @@ public class UserServicesImpl implements UserServices {
 		{
 			if(userAvailable.isPresent() && passwordEncoder.matches(loginuser.getPassword(),userAvailable.get().getPassword())) 
 			{ 
-				String generateToken = UserToken.generateToken(userAvailable.get().getuserId());
-				response.setStatusCode(environment.getProperty("status.success.code"));
+				String generateToken = UserToken.generateToken(userAvailable.get().getUserId());
+				response.setStatusCode(environment.getProperty("status.code.success"));
 				response.setStatusMessage(environment.getProperty("status.login.successful"));
 				response.setToken(generateToken);
 				return response; 
@@ -137,7 +137,7 @@ public class UserServicesImpl implements UserServices {
 		{
 			User user = userAvailable.get();
 			EmailUtil.send(email, environment.getProperty("status.password.reset"), Utility.getBody(user, "user"));
-			response.setStatusCode(environment.getProperty("status.success.code"));
+			response.setStatusCode(environment.getProperty("status.code.success"));
 			response.setStatusMessage(environment.getProperty("status.password.successful"));
 			return response;
 		}
@@ -158,7 +158,7 @@ public class UserServicesImpl implements UserServices {
 			System.out.println(user.getPassword());
 			user.setAccountUpdateDate(LocalDate.now());
 			userRepository.save(user);
-			response.setStatusCode(environment.getProperty("status.success.code"));
+			response.setStatusCode(environment.getProperty("status.code.success"));
 			response.setStatusMessage(environment.getProperty("status.password.resetpassword"));
 			return response;
 	}

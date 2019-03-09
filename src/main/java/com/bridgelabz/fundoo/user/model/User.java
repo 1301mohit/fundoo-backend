@@ -55,9 +55,9 @@ public class User{
 	
 	private boolean isVerification;
 	
-	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
-	@JoinColumn(name="use_id")//,referencedColumnName="userId")
-	private List<Note> notes;
+//	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
+//	@JoinColumn(name="use_id")//,referencedColumnName="userId")
+//	private List<Note> notes;
 	
 	public User() 
 	{
@@ -72,11 +72,11 @@ public class User{
 		this.password = password;
 	}
 
-	public Long getuserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setuserId(Long userId) {
+	public void setUserId(Long UserId) {
 		this.userId = userId;
 	}
 
@@ -134,13 +134,13 @@ public class User{
 		this.accountUpdateDate = accountUpdateDate;
 	}
 
-	public List<Note> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
+//	public List<Note> getNotes() {
+//		return notes;
+//	}
+//
+//	public void setNotes(List<Note> notes) {
+//		this.notes = notes;
+//	}
 	
 	
 }

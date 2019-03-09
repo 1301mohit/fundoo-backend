@@ -22,10 +22,10 @@ public class MessageServiceImpl implements MessageService {
 	public void sendEmail(User user) throws Exception {
 		System.out.println("Send email");
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(environment.getProperty("spring.mail.username"));
-		mail.setFrom(user.getEmail());
+		mail.setTo(user.getEmail());
+		mail.setFrom(environment.getProperty("spring.mail.username"));
 		mail.setSubject(environment.getProperty("status.register.mail.registration"));
-		String userActivationLink = Utility.getUrl(user.getuserId());
+		String userActivationLink = Utility.getUrl(user.getUserId());
 		System.out.println("Useractivationlink:"+userActivationLink);
 		mail.setText(userActivationLink);
 		System.out.println("Message is ready");

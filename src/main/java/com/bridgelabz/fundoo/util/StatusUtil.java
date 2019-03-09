@@ -8,9 +8,6 @@ import com.bridgelabz.fundoo.response.Response;
 @Component
 public class StatusUtil {
 	
-	@Autowired
-	static Response response;
-	
 	/**
 	 * Purpose : This method set statusMessage and statusCode and return response object.
 	 * 
@@ -20,8 +17,9 @@ public class StatusUtil {
 	 */
 	public static Response statusInfo(String statusMessage, String statusCode)
 	{
-		//Response response = new Response();
-		response.setStatusCode("statusCode");
+		System.out.println("Status Message:"+statusMessage);
+		Response response = new Response();
+		response.setStatusCode(statusCode);
 		response.setStatusMessage(statusMessage);
 		return response;
 	}
@@ -36,7 +34,7 @@ public class StatusUtil {
 	 */
 	public static Response tokenStatusInfo(String statusMessage, String statusCode, String token)
 	{
-		//Response response = new Response();
+		Response response = new Response();
 		response.setStatusCode(statusCode);
 		response.setStatusMessage(statusMessage);
 		response.setToken(token);

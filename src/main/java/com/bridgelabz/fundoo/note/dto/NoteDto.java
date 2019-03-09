@@ -18,7 +18,7 @@ public class NoteDto {
 	private String color;
 //	private String image;
 	private boolean isArchive;
-//	private boolean isTrash;
+	private boolean isTrash;
 //	private LocalDateTime remainder;
 	
 //	public Long getUserId() {

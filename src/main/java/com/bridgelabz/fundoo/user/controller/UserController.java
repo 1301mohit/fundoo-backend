@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,10 +36,11 @@ import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 
 //@CrossOrigin(origins="http://localhost:4200")
-//@RequestMapping("/bridgelabz/fundoo")
+//@RequestMapping("/user")
 @RestController
 @PropertySource("classpath:message.properties")
-@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = {"jwtToken"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = {"jwtToken"})
 public class UserController {
 	
 	static final Logger logger=LoggerFactory.getLogger(UserController.class);
@@ -88,7 +90,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/user/{token}")
-	public ResponseEntity<Response> resetPassword(@PathVariable String token, @RequestParam String password) throws Exception
+	public ResponseEntity<Response> resetPassword(@RequestParam("password") String password, @PathVariable String token) throws Exception
 	{
 		logger.info("token:"+token);
 		logger.info("password:"+password);
