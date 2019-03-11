@@ -54,15 +54,15 @@ public class NoteController {
 		logger.info("noteDto:"+noteDto);
 		logger.trace("Create Note");
 		Response response = noteServices.addNote(noteDto, token);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateNote")
-	public ResponseEntity<Response> updateNote(@RequestBody Long noteId, @RequestHeader("token") String token) throws Exception {
+	@PutMapping("/updateNote/{noteId}")
+	public ResponseEntity<Response> updateNote(@PathVariable Long noteId, @RequestBody NoteDto noteDto, @RequestHeader("token") String token) throws Exception {
 		logger.info("noteId:"+noteId);
 		logger.info("Token:"+token);
 		logger.trace("Update Note");
-		Response response = noteServices.updateNote(noteId,token);
+		Response response = noteServices.updateNote(noteId,noteDto,token);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
@@ -82,20 +82,21 @@ public class NoteController {
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/pinNote/{noteId}")
+	@PutMapping("/archiveNote/{noteId}")
 	public ResponseEntity<Response> archiveNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
 		logger.info("NoteId:"+noteId);
 		logger.info("Token:"+token);
-		Response response = noteServices.pinNote(noteId, token);
+		Response response = noteServices.archiveNote(noteId, token);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping
-	public List<Note> getAllNotes(@RequestHeader("token") String token) throws Exception{
+	@GetMapping("/getAllNotes")
+	public ResponseEntity<List<Note>> getAllNotes(@RequestHeader("token") String token) throws Exception{
 		logger.info("Token:"+token);
 		logger.info("Get all notes");
-		List<Note> list = noteServices.getAllNotes(token);
-		return list;
+		List<Note> listOfNotes = noteServices.getAllNotes(token);
+		System.out.println("List of Notes"+listOfNotes);
+		return new ResponseEntity<>(listOfNotes, HttpStatus.OK);
 	}
 	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){

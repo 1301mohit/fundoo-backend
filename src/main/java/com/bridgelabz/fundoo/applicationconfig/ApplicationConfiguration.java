@@ -11,8 +11,8 @@ import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 /**
  * Purpose: Configuration
+ * 
  * @author  Mohit Kumar
- *
  */
 @Configuration
 public class ApplicationConfiguration {

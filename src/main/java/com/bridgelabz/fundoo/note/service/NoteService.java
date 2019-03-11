@@ -8,7 +8,7 @@ import com.bridgelabz.fundoo.response.Response;
 
 public interface NoteService {
 	public Response addNote(NoteDto noteDto, String token) throws Exception;
-	public Response updateNote(Long noteId, String token) throws Exception;
+	public Response updateNote(Long noteId,NoteDto noteDto, String token) throws Exception;
 	public List<Note> getAllNotes(String token) throws Exception;
 	public Response trashNote(Long noteId, String token) throws Exception;
 	public Response deleteNote(Long noteId, String token) throws Exception;

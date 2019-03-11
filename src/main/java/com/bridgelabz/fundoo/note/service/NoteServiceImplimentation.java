@@ -59,11 +59,11 @@ public class NoteServiceImplimentation implements NoteService{
 		note.setUser(user.get());
 		noteRepository.save(note);
 		System.out.println(environment.getProperty("status.code.success"));
-		Response response = StatusUtil.statusInfo(environment.getProperty("status.addNote.success"), environment.getProperty("status.code.success"));
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.add.success"), environment.getProperty("status.code.success"));
 		return response;
 	}
 		
-	public Response updateNote(Long noteId, String token) throws Exception {
+	public Response updateNote(Long noteId,NoteDto noteDto, String token) throws Exception {
 		logger.info("Uddate a note");
 		logger.info("NoteId:"+noteId);
 		logger.info("Token:"+token);
@@ -72,11 +72,14 @@ public class NoteServiceImplimentation implements NoteService{
 		Note note = noteAvailable.get();
 		if(userId == note.getUser().getUserId() && noteAvailable.isPresent()) {
 			note.setLastModifiedStamp(LocalDateTime.now());
+			note.setLastModifiedStamp(LocalDateTime.now());
+			note.setTitle(noteDto.getTitle());
+			note.setDescription(noteDto.getDescription());
 			noteRepository.save(note);
-			Response response = StatusUtil.statusInfo("Successfully updated", "101");
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.update.success"), environment.getProperty("status.code.success"));
 			return response;
 		}
-		Response response = StatusUtil.statusInfo("User not match", "401");
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 		return response;
 	}
 	
@@ -85,15 +88,13 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.trace("Add note in trash");
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Note> note = noteRepository.findById(noteId);
-		//Optional<Note> note1 = noteRepository.findBynoteId(note.getNoteId());
-		//note1.get().setTrash(true);
 		if(note.get().getUser().getUserId() == userId) {
 			note.get().setTrash(true);
 			noteRepository.save(note.get());
-			Response response = StatusUtil.statusInfo("Successfully note add to trash", "101");
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.trash.success"), environment.getProperty("status.code.success"));
 			return response;
 		}
-		Response response = StatusUtil.statusInfo("User not match", "401");
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 		return response;
 	}
 	
@@ -105,11 +106,11 @@ public class NoteServiceImplimentation implements NoteService{
 			Long userId = UserToken.tokenVerify(token);
 			if(userId == note.get().getUser().getUserId()) {
 				noteRepository.delete(note.get());
-				Response response = StatusUtil.statusInfo("Delete note Successfully", "201");
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.delete.success"), environment.getProperty("status.code.success"));
 				return response;
 			}
 			else {
-				Response response = StatusUtil.statusInfo("User not match", "401");
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 				return response;
 			}
 		}
@@ -126,13 +127,23 @@ public class NoteServiceImplimentation implements NoteService{
 		Optional<Note> note = noteRepository.findById(noteId);
 		Long userId = UserToken.tokenVerify(token);
 		if(userId == note.get().getUser().getUserId()) {
-			note.get().setPinned(true);
-			noteRepository.save(note.get());
-			Response response = StatusUtil.statusInfo("Note pin", "201");
-			return response;
+			if(note.get().isPinned()) {
+				note.get().setPinned(false);
+				noteRepository.save(note.get());
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.unpin.note"), environment.getProperty("status.code.success"));
+				//Response response = StatusUtil.statusInfo("Note unpin", "201");
+				return response;
+			}
+			else {
+				note.get().setPinned(true);
+				noteRepository.save(note.get());
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.pin.note"), environment.getProperty("status.code.success"));
+				//Response response = StatusUtil.statusInfo("Note pin", "201");
+				return response;
+			}
 		}
 		else {
-			Response response = StatusUtil.statusInfo("User not match", "401");
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 			return response;
 		}
 	}
@@ -144,13 +155,22 @@ public class NoteServiceImplimentation implements NoteService{
 		Optional<Note> note = noteRepository.findById(noteId);
 		Long userId = UserToken.tokenVerify(token);
 		if(userId == note.get().getUser().getUserId()) {
-			note.get().setArchive(true);
-			noteRepository.save(note.get());
-			Response response = StatusUtil.statusInfo("Note archive", "201");
-			return response;
+			if(note.get().isArchive()) {
+				note.get().setArchive(false);
+				noteRepository.save(note.get());
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.not.archive.note"), environment.getProperty("status.code.success"));
+				return response;
+			}
+			else
+			{
+				note.get().setArchive(true);
+				noteRepository.save(note.get());
+				Response response = StatusUtil.statusInfo(environment.getProperty("status.archive.note"), environment.getProperty("status.code.success"));
+				return response;
+			}
 		}
 		else {
-			Response response = StatusUtil.statusInfo("User not match", "401");
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 			return response;
 		}
 	}
@@ -159,16 +179,22 @@ public class NoteServiceImplimentation implements NoteService{
 	public List<Note> getAllNotes(String token) throws Exception {
 		logger.info("Token:"+token);
 		Long userId = UserToken.tokenVerify(token);
-		List<Note> list = noteRepository.findAll();
-		List<Note> list1 = new ArrayList<Note>();
-		for(int i=0; i<=list.size(); i++) {
-			if(userId == list.get(i).getUser().getUserId()) {
-				list1.add(list.add());
+		List<Note> listOfNote = noteRepository.findAll();
+		List<Note> list = new ArrayList<Note>();
+		for(int i=0; i<listOfNote.size(); i++) {
+			if(userId == listOfNote.get(i).getUser().getUserId()) {
+				System.out.println("listOfNotes"+listOfNote.get(i));
+				list.add(listOfNote.get(i));
 			}
 		}
-		return null;
+		System.out.println("list:"+list);
+		return list;
 	}
-		
+}	
+	
+	
+	
+//	List<Note> list = noteRepository.findAllByUserId(userId);	
 		
 //		Long userId = UserToken.tokenVerify(token);
 //		System.out.println("UserId:"+userId);
@@ -331,4 +357,4 @@ public class NoteServiceImplimentation implements NoteService{
 //		List<Note> listOfNotes = listOfNotes(userId);
 //		
 //	}
-}
+

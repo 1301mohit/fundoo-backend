@@ -79,11 +79,11 @@ public class UserController {
 		return result;
 	}
 
-	@PostMapping("/forgetPassword")
-	public ResponseEntity<Response> forgetPassword(@RequestParam String email) throws Exception
+	@PostMapping("/forgotPassword")
+	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) throws Exception
 	{
 		logger.info("email:"+email);
-		logger.trace("Forget Password");
+		logger.trace("Forgot Password");
 		Response response = userServices.forgotPassword(email);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 //		return new ResponseEntity<String>("Change your password", HttpStatus.OK);

@@ -13,12 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.UserException;
+//import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.util.EmailUtil;
+import com.bridgelabz.fundoo.util.StatusUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 import com.bridgelabz.fundoo.util.Utility;
 
@@ -61,7 +63,8 @@ public class UserServicesImpl implements UserServices {
 	public Response register(UserDTO userDTO) throws MessagingException, Exception //throws Exception 
 	{	
 		Optional<User> useravailable = userRepository.findByEmail(userDTO.getEmail());
-		//Response response =new Response();
+		//Response response =new Response()
+		;
 		//To check user is available or not
 		if(useravailable.isPresent())
 		{
@@ -81,8 +84,9 @@ public class UserServicesImpl implements UserServices {
 	    
 //	    EmailUtil.send(user.getEmail(), environment.getProperty("status.register.mailForRegistration"), getUrl(user.getuserId()));
 	    messageServiceImpl.sendEmail(user);
-	    response.setStatusCode(environment.getProperty("status.code.success"));
-	    response.setStatusMessage(environment.getProperty("status.register.successful"));
+	    Response response = StatusUtil.statusInfo(environment.getProperty("status.register.successful"), environment.getProperty("status.code.success"));
+	    //response.setStatusCode(environment.getProperty("status.code.success"));
+	    //response.setStatusMessage(environment.getProperty("status.register.successful"));
 	    return response;
 	}
 	
@@ -97,9 +101,10 @@ public class UserServicesImpl implements UserServices {
 			if(userAvailable.isPresent() && passwordEncoder.matches(loginuser.getPassword(),userAvailable.get().getPassword())) 
 			{ 
 				String generateToken = UserToken.generateToken(userAvailable.get().getUserId());
-				response.setStatusCode(environment.getProperty("status.code.success"));
-				response.setStatusMessage(environment.getProperty("status.login.successful"));
-				response.setToken(generateToken);
+				Response response = StatusUtil.tokenStatusInfo(environment.getProperty("status.code.success"), environment.getProperty("status.login.successful"), generateToken);
+				//response.setStatusCode(environment.getProperty("status.code.success"));
+				//response.setStatusMessage(environment.getProperty("status.login.successful"));
+				//response.setToken(generateToken);
 				return response; 
 			} 
 			else 
@@ -136,9 +141,11 @@ public class UserServicesImpl implements UserServices {
 		if(userAvailable.isPresent()) 
 		{
 			User user = userAvailable.get();
-			EmailUtil.send(email, environment.getProperty("status.password.reset"), Utility.getBody(user, "user"));
-			response.setStatusCode(environment.getProperty("status.code.success"));
-			response.setStatusMessage(environment.getProperty("status.password.successful"));
+			//EmailUtil.send(email, environment.getProperty("status.password.reset"), Utility.getBody(user, "user"));
+			messageServiceImpl.sendEmail(user);
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.password.successful"), environment.getProperty("status.code.success"));
+			//response.setStatusCode(environment.getProperty("status.code.success"));
+			//response.setStatusMessage(environment.getProperty("status.password.successful"));
 			return response;
 		}
 		else 
@@ -158,8 +165,9 @@ public class UserServicesImpl implements UserServices {
 			System.out.println(user.getPassword());
 			user.setAccountUpdateDate(LocalDate.now());
 			userRepository.save(user);
-			response.setStatusCode(environment.getProperty("status.code.success"));
-			response.setStatusMessage(environment.getProperty("status.password.resetpassword"));
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.password.resetpassword"), environment.getProperty("status.code.success"));
+		//	response.setStatusCode(environment.getProperty("status.code.success"));
+		//	response.setStatusMessage(environment.getProperty("status.password.resetpassword"));
 			return response;
 	}
 }

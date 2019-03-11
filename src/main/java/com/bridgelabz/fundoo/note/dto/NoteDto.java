@@ -36,7 +36,7 @@ public class NoteDto {
 	public String getDescription() {
 		return description;
 	}
-	public void setContent(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 	public boolean isPin() {
