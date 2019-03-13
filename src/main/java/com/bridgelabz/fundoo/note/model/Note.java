@@ -2,12 +2,15 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -45,6 +48,13 @@ public class Note {
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
+	
+	@ManyToMany
+	@JoinColumn(name="note_id")
+//	@JoinTable(name = "Note_Label",
+//     joinColumns = { @JoinColumn(name = "label_id") },
+//     inverseJoinColumns = { @JoinColumn(name = "note_id") })
+	private Set<Label> label;
 	
 	public Long getNoteId() {
 		return noteId;
@@ -118,6 +128,13 @@ public class Note {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public Set<Label> getLabel() {
+		return label;
+	}
+	public void setLabel(Set<Label> label) {
+		this.label = label;
 	}
 	@Override
 	public String toString() {

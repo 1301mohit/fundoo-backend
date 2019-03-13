@@ -190,6 +190,24 @@ public class NoteServiceImplimentation implements NoteService{
 		System.out.println("list:"+list);
 		return list;
 	}
+	
+	public Response colorOfNote(Long noteId, String token, String color) throws Exception {
+		logger.info("noteId"+noteId);
+		logger.info("color"+color);
+		logger.info("Token"+token);
+		Optional<Note> note = noteRepository.findById(noteId);
+		Long userId = UserToken.tokenVerify(token);
+		if(userId == note.get().getUser().getUserId()) {
+			note.get().setColor(color);
+			noteRepository.save(note.get());
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.color"), environment.getProperty("status.code.success"));
+			return response;
+		}
+		else {
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+			return response;
+		}
+	}
 }	
 	
 	

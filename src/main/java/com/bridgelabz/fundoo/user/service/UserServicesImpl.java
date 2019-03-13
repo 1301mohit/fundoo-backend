@@ -101,7 +101,7 @@ public class UserServicesImpl implements UserServices {
 			if(userAvailable.isPresent() && passwordEncoder.matches(loginuser.getPassword(),userAvailable.get().getPassword())) 
 			{ 
 				String generateToken = UserToken.generateToken(userAvailable.get().getUserId());
-				Response response = StatusUtil.tokenStatusInfo(environment.getProperty("status.code.success"), environment.getProperty("status.login.successful"), generateToken);
+				Response response = StatusUtil.tokenStatusInfo(environment.getProperty("status.login.successful"), environment.getProperty("status.code.success"), generateToken);
 				//response.setStatusCode(environment.getProperty("status.code.success"));
 				//response.setStatusMessage(environment.getProperty("status.login.successful"));
 				//response.setToken(generateToken);

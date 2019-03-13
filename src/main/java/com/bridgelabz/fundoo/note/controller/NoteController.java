@@ -99,6 +99,14 @@ public class NoteController {
 		return new ResponseEntity<>(listOfNotes, HttpStatus.OK);
 	}
 	
+	@PostMapping("/color/{noteId}")
+	public ResponseEntity<Response> colorOfNote(@PathVariable Long noteId,@RequestParam String color,@RequestHeader("token") String token) throws Exception{
+		logger.info("Token:"+token);
+		logger.info("Color of note");
+		Response response = noteServices.colorOfNote(noteId,token,color);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){
 //		logger.info("noteId:"+noteId);
 //		logger.trace("token:"+token);

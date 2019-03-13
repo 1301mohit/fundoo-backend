@@ -14,6 +14,7 @@ public interface NoteService {
 	public Response deleteNote(Long noteId, String token) throws Exception;
 	public Response pinNote(Long noteId, String token) throws Exception;
 	public Response archiveNote(Long noteId, String token) throws Exception;
+	public Response colorOfNote(Long noteId, String token, String color) throws Exception;
 //	public void delete(Long noteId);
 //	public void update(Long noteId);
 }
