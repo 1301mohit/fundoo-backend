@@ -27,9 +27,9 @@ public class Label {
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@ManyToMany
-	@JoinColumn(name="note_id")
-	private List<Note> notes;
+//	@ManyToMany
+//	@JoinColumn(name="note_id")
+//	private List<Note> notes;
 	
 	public Long getLabelId() {
 		return labelId;
@@ -61,12 +61,12 @@ public class Label {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public List<Note> getNotes() {
-		return notes;
-	}
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
+//	public List<Note> getNotes() {
+//		return notes;
+//	}
+//	public void setNotes(List<Note> notes) {
+//		this.notes = notes;
+//	}
 	
 //	public Note getNote() {
 //		return note;
