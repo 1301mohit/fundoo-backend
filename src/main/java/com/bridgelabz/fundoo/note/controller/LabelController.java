@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.note.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,5 +65,36 @@ public class LabelController {
 		logger.info("LabelDto"+labelDto);
 		Response response = labelService.updateLabel(token, labelId, labelDto);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/addLabelInNote/{labelId}/{noteId}")
+	public ResponseEntity<Response> addLabelInNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) throws Exception{
+		logger.info("Add label for note");
+		logger.info("Token"+token);
+		logger.info("LabelId"+labelId);
+		logger.info("NoteId"+noteId);
+		//logger.info("LabelDto"+labelDto);
+		Response response = labelService.addLabelInNote(token, labelId, noteId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteLabelOfNote/{labelId}/{noteId}")
+	public ResponseEntity<Response> deleteLabelFormNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) throws Exception{
+		logger.info("Delete label from note");
+		logger.info("Token"+token);
+		logger.info("LabelId"+labelId);
+		logger.info("Noteid"+noteId);
+		Response response = labelService.deleteLabelFromNote(token, labelId, noteId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getLabelOfNote/{noteId}")
+	public ResponseEntity<Set<Label>> getLabelOfNote(@RequestHeader("token") String token, @PathVariable Long noteId) throws Exception{
+		logger.info("Get label of note");
+		logger.info("Token"+token);
+	//	logger.info("LabelId"+labelId);
+		logger.info("NoteId"+noteId);
+		Set<Label> labels = labelService.getLabelOfNote(token, noteId);
+		return new ResponseEntity<>(labels, HttpStatus.OK);
 	}
 }

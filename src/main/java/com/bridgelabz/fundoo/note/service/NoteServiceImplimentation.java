@@ -196,10 +196,11 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("color"+color);
 		logger.info("Token"+token);
 		Optional<Note> note = noteRepository.findById(noteId);
+		Note note1 = note.get();
 		Long userId = UserToken.tokenVerify(token);
 		if(userId == note.get().getUser().getUserId()) {
-			note.get().setColor(color);
-			noteRepository.save(note.get());
+			note1.setColor(color);
+			noteRepository.save(note1);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.color"), environment.getProperty("status.code.success"));
 			return response;
 		}

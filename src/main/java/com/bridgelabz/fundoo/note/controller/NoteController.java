@@ -102,6 +102,8 @@ public class NoteController {
 	@PostMapping("/color/{noteId}")
 	public ResponseEntity<Response> colorOfNote(@PathVariable Long noteId,@RequestParam String color,@RequestHeader("token") String token) throws Exception{
 		logger.info("Token:"+token);
+		logger.info("Color is"+color);
+		logger.info("NoteId is "+noteId);
 		logger.info("Color of note");
 		Response response = noteServices.colorOfNote(noteId,token,color);
 		return new ResponseEntity<>(response, HttpStatus.OK);

@@ -14,11 +14,11 @@ public class NoteDto {
 	//private Long userId;
 	private String title;
 	private String description;
-	private boolean isPin;
+	private boolean isPinned;
 	private String color;
 //	private String image;
 	private boolean isArchive;
-	private boolean isTrash;
+//	private boolean isTrash;
 //	private LocalDateTime remainder;
 	
 //	public Long getUserId() {
@@ -39,11 +39,11 @@ public class NoteDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public boolean isPin() {
-		return isPin;
+	public boolean isPinned() {
+		return isPinned;
 	}
-	public void setPin(boolean isPinned) {
-		this.isPin = isPinned;
+	public void setPinned(boolean isPinned) {
+		this.isPinned = isPinned;
 	}
 	public String getColor() {
 		return color;

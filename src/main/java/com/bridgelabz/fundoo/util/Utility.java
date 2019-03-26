@@ -10,6 +10,6 @@ public class Utility {
 	
 	public static String getUrl(Long id) throws Exception
 	{
-		return "192.168.0.84:8080/user/"+UserToken.generateToken(id);
+		return "192.168.0.23:8080/user/"+UserToken.generateToken(id);
 	}
 }

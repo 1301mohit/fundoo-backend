@@ -24,7 +24,7 @@ import com.bridgelabz.fundoo.note.model.Note;
 //import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
-@Table(name="User_Details")
+@Table(name="user")
 public class User{
 	
 	@Id

@@ -129,10 +129,10 @@ public class UserServicesImpl implements UserServices {
 	}
 	
 	
-	public String getUrl(Long id) throws Exception
-	{
-		return "192.168.0.84:8080/user/"+UserToken.generateToken(id);
-	}
+//	public String getUrl(Long id) throws Exception
+//	{
+//		return "192.168.0.23:8080/user/"+UserToken.generateToken(id);
+//	}
 	
 	@Override
 	public Response forgotPassword(String email) throws MessagingException, Exception  

@@ -2,9 +2,12 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +27,7 @@ import javax.validation.constraints.NotNull;
 import com.bridgelabz.fundoo.user.model.User;
 
 @Entity
-@Table(name = "Note_Details")
+@Table(name = "note")
 //@Setter
 //@Getter
 //@ToString
@@ -49,11 +52,20 @@ public class Note {
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@ManyToMany
-	@JoinColumn(name="note_id")
+//	@ManyToMany
 //	@JoinTable(name = "Note_Label",
 //     joinColumns = { @JoinColumn(name = "label_id") },
 //     inverseJoinColumns = { @JoinColumn(name = "note_id") })
+//	private List<Label> label;
+	
+//	@ManyToMany
+//	@JoinTable(name = "Note_Label",
+//     joinColumns = { @JoinColumn(name = "note_id") },
+//     inverseJoinColumns = { @JoinColumn(name = "label_id") })
+	@ManyToMany
+	@JoinTable(name = "note_label",
+	joinColumns = { @JoinColumn(name = "note_id") },
+	inverseJoinColumns = { @JoinColumn(name = "label_id") })
 	private Set<Label> label;
 	
 	public Long getNoteId() {
