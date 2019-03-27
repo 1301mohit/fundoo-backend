@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.note.dto.LabelDto;
 import com.bridgelabz.fundoo.note.model.Label;
+import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.response.Response;
 
 
@@ -18,4 +19,5 @@ public interface LabelService {
 	public Response addLabelInNote(String token, Long labelId, Long noteId)  throws Exception;
 	public Response deleteLabelFromNote(String token, Long labelId, Long noteId) throws Exception;
 	public Set<Label> getLabelOfNote(String token, Long noteId) throws Exception;
+	public List<Note> getNoteOfLabel(String token, Long labelId) throws Exception;
 }

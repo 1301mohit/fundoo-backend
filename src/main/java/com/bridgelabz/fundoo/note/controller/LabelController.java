@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.LabelDto;
 import com.bridgelabz.fundoo.note.model.Label;
+import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.service.LabelService;
 import com.bridgelabz.fundoo.response.Response;
 
@@ -92,9 +93,17 @@ public class LabelController {
 	public ResponseEntity<Set<Label>> getLabelOfNote(@RequestHeader("token") String token, @PathVariable Long noteId) throws Exception{
 		logger.info("Get label of note");
 		logger.info("Token"+token);
-	//	logger.info("LabelId"+labelId);
 		logger.info("NoteId"+noteId);
 		Set<Label> labels = labelService.getLabelOfNote(token, noteId);
 		return new ResponseEntity<>(labels, HttpStatus.OK);
+	}
+	
+	@PostMapping("/getNoteOfLabel/{labelId}")
+	public ResponseEntity<List<Note>> getNoteOfLabel(@RequestHeader("token") String token, @PathVariable Long labelId) throws Exception{
+		logger.info("Get note of Label");
+		logger.info("Token"+token);
+		logger.info("LabelId"+labelId);
+		List<Note> notes = labelService.getNoteOfLabel(token, labelId);
+		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 }

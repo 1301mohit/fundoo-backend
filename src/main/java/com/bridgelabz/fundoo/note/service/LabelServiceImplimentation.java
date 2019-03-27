@@ -177,5 +177,15 @@ public class LabelServiceImplimentation implements LabelService{
 		System.out.println("Labels:"+label);
 		return label;
 	}
+
+	@Override
+	public List<Note> getNoteOfLabel(String token, Long labelId) throws Exception {
+		logger.info("getNoteOfLabel");
+		Long userId = UserToken.tokenVerify(token);
+		Optional<Label> label = labelRepository.findById(labelId);
+		List<Note> notes = label.get().getNotes();
+		System.out.println("Notes:"+notes);
+		return null;
+	}
 	
 }
