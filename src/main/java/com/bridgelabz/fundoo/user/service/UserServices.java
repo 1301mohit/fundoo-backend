@@ -4,6 +4,7 @@ package com.bridgelabz.fundoo.user.service;
 import javax.mail.MessagingException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
@@ -17,5 +18,5 @@ public interface UserServices {
 	public String validateEmailId(String token) throws Exception; 
 	public Response forgotPassword(String email) throws Exception;
 	public Response resetPassword(String token, String password) throws Exception;
-	
+	public Response saveProfileImage(String token, MultipartFile file) throws Exception;
 }

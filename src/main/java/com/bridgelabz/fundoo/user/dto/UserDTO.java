@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 //import org.hibernate.validator.constraints.UniqueElements;
 
@@ -21,7 +22,8 @@ public class UserDTO {
 	private String lastName;
 	
 	//@UniqueElements
-	@Email(regexp =  "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.(?:[A-Z]{2,}|com|org))+$",message="Not valid")
+	//@Email(regexp =  "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.(?:[A-Z]{2,}|com|org))+$",message="Not valid")
+	@Email(message="Please enter valid emailid")
 	@Column(unique = true, nullable = false)
 	@NotEmpty(message="Please fill the email")
 	private String email;
@@ -29,6 +31,7 @@ public class UserDTO {
 	@NotEmpty(message = "Please fill the password")
 	private String password;
 	
+	@Pattern(regexp="[0-9]{10}",message="Mobile number not valid")
 	@NotEmpty(message = "Please fill the mobile number")
 	private String mobileNumber;
 	

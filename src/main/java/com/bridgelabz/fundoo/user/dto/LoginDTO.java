@@ -5,7 +5,8 @@ import javax.validation.constraints.NotEmpty;
 
 public class LoginDTO {
 	
-	@Email(regexp =  "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.(?:[A-Z]{2,}|com|org))+$",message="Not valid")
+	//@Email(regexp =  "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.(?:[A-Z]{2,}|com|org))+$",message="Not valid")
+	@Email(message="Please enter valid emailid")
 	@NotEmpty(message="Please fill the name")
 	String email;
 	

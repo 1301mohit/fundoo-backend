@@ -1,27 +1,15 @@
 package com.bridgelabz.fundoo.user.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-
-import com.bridgelabz.fundoo.note.model.Note;
-
-//import org.hibernate.validator.constraints.UniqueElements;
-
-//import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name="user")
@@ -38,6 +26,7 @@ public class User{
 	private String lastName;
 	
 	//@UniqueElements
+	@Email(message="Please enter valid emailid")
 	@Column(unique = true, nullable=false)
 	@NotEmpty(message="please fill the email")
 	private String email;
@@ -54,6 +43,8 @@ public class User{
 	private LocalDate accountUpdateDate;
 	
 	private boolean isVerification;
+	
+	private String profileImage;
 	
 //	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
 //	@JoinColumn(name="use_id")//,referencedColumnName="userId")
@@ -134,6 +125,15 @@ public class User{
 		this.accountUpdateDate = accountUpdateDate;
 	}
 
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	
 //	public List<Note> getNotes() {
 //		return notes;
 //	}
@@ -141,6 +141,8 @@ public class User{
 //	public void setNotes(List<Note> notes) {
 //		this.notes = notes;
 //	}
+	
+	
 	
 	
 }

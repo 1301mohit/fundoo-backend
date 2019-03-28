@@ -1,7 +1,13 @@
 package com.bridgelabz.fundoo.user.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 
@@ -11,6 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.exception.UserException;
 //import com.bridgelabz.fundoo.exception.UserException;
@@ -23,6 +30,7 @@ import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.StatusUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 import com.bridgelabz.fundoo.util.Utility;
+//import com.google.common.io.Files;
 
 @Service
 @PropertySource("classpath:message.properties")
@@ -46,6 +54,7 @@ public class UserServicesImpl implements UserServices {
 	@Autowired
 	private MessageServiceImpl messageServiceImpl;
 	
+	private final Path fileLocation = Paths.get("/home/admin-122/FundooFile");
 	//Response response =new Response();
 
 	
@@ -170,6 +179,27 @@ public class UserServicesImpl implements UserServices {
 		//	response.setStatusMessage(environment.getProperty("status.password.resetpassword"));
 			return response;
 	}
+
+	@Override
+	public Response saveProfileImage(String token, MultipartFile file) throws Exception {
+		long userId = UserToken.tokenVerify(token);
+		User user = userRepository.findById(userId).get();
+		UUID uuid = UUID.randomUUID();
+		String uniqueId = uuid.toString();
+		//try {
+		Files.copy(file.getInputStream(), fileLocation.resolve(uniqueId), StandardCopyOption.REPLACE_EXISTING);
+//		}catch(IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		user.setProfileImage(uniqueId);
+		userRepository.save(user);
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.save.profile"),  environment.getProperty("status.code.success"));
+		return response;
+	}
+	
+	
+	
 }
 
 
