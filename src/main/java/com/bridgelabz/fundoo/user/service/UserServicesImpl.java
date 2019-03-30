@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -182,7 +184,7 @@ public class UserServicesImpl implements UserServices {
 
 	@Override
 	public Response saveProfileImage(String token, MultipartFile file) throws Exception {
-		long userId = UserToken.tokenVerify(token);
+		Long userId = UserToken.tokenVerify(token);
 		User user = userRepository.findById(userId).get();
 		UUID uuid = UUID.randomUUID();
 		String uniqueId = uuid.toString();
@@ -198,6 +200,22 @@ public class UserServicesImpl implements UserServices {
 		return response;
 	}
 	
+	@Override
+	public Resource getImage(String token) throws Exception {
+		Long userId = UserToken.tokenVerify(token);
+		User user = userRepository.findById(userId).get();
+		
+		//get image name from database
+		Path imagePath = fileLocation.resolve(user.getProfileImage());
+		
+		//Creating url resource based on uri object
+		Resource resource = new UrlResource(imagePath.toUri());
+		
+		if(resource.exists() || resource.isReadable()) {
+			return resource;
+		}
+		return null;
+	}
 	
 	
 }

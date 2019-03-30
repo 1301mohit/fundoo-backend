@@ -109,6 +109,15 @@ public class NoteController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping("/restoreNote/{noteId}")
+	public ResponseEntity<Response> restoreNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+		logger.info("Token:"+token);
+		logger.info("NoteId"+noteId);
+		Response response = noteServices.restoreNote(noteId, token);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){
 //		logger.info("noteId:"+noteId);
 //		logger.trace("token:"+token);

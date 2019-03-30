@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
@@ -95,8 +97,22 @@ public class UserController {
 		logger.info("token:"+token);
 		logger.info("password:"+password);
 		Response response = userServices.resetPassword(token, password);
-		return new ResponseEntity<Response>(response ,HttpStatus.OK);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
 //		return new ResponseEntity<String>("Password reset",HttpStatus.OK);
+	}
+	
+	@PostMapping("/imageUpload")
+	public ResponseEntity<Response> saveImage(@RequestHeader("token") String token,@RequestParam("file") MultipartFile file) throws Exception{
+		logger.info("Token:"+token);
+		Response response = userServices.saveProfileImage(token, file);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getImage/{token}")
+	public ResponseEntity<Resource> getProfilePicture(@PathVariable String token) throws Exception{
+		logger.info("Token:"+token);
+		Resource response = userServices.getImage(token);
+		return new ResponseEntity<Resource>(response, HttpStatus.OK);
 	}
 }
 

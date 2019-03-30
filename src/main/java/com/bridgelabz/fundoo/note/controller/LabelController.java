@@ -98,7 +98,7 @@ public class LabelController {
 		return new ResponseEntity<>(labels, HttpStatus.OK);
 	}
 	
-	@PostMapping("/getNoteOfLabel/{labelId}")
+	@GetMapping("/getNoteOfLabel/{labelId}")
 	public ResponseEntity<List<Note>> getNoteOfLabel(@RequestHeader("token") String token, @PathVariable Long labelId) throws Exception{
 		logger.info("Get note of Label");
 		logger.info("Token"+token);

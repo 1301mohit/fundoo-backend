@@ -209,6 +209,24 @@ public class NoteServiceImplimentation implements NoteService{
 			return response;
 		}
 	}
+
+	@Override
+	public Response restoreNote(Long noteId, String token) throws Exception {
+		logger.info("Restore note in Service");
+		Long userId = UserToken.tokenVerify(token);
+		Note note = noteRepository.findById(noteId).get();
+		if(userId == note.getUser().getUserId()) {
+			note.setTrash(false);
+			note.setLastModifiedStamp(LocalDateTime.now());
+			noteRepository.save(note);
+			Response response = StatusUtil.statusInfo("Restore note successfully", environment.getProperty("status.code.success"));
+			return response;
+		}
+		else {
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+			return response;
+		}
+	}
 }	
 	
 	

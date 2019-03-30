@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.user.service;
 
 import javax.mail.MessagingException;
 
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +20,6 @@ public interface UserServices {
 	public Response forgotPassword(String email) throws Exception;
 	public Response resetPassword(String token, String password) throws Exception;
 	public Response saveProfileImage(String token, MultipartFile file) throws Exception;
+	public Resource getImage(String token) throws Exception;
+	
 }

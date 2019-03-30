@@ -185,7 +185,7 @@ public class LabelServiceImplimentation implements LabelService{
 		Optional<Label> label = labelRepository.findById(labelId);
 		List<Note> notes = label.get().getNotes();
 		System.out.println("Notes:"+notes);
-		return null;
+		return notes;
 	}
 	
 }

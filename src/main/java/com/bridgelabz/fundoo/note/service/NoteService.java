@@ -17,4 +17,5 @@ public interface NoteService {
 	public Response colorOfNote(Long noteId, String token, String color) throws Exception;
 //	public void delete(Long noteId);
 //	public void update(Long noteId);
+	public Response restoreNote(Long noteId, String token) throws Exception;
 }
