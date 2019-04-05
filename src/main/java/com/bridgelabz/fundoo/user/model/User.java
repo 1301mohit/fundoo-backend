@@ -1,15 +1,22 @@
 package com.bridgelabz.fundoo.user.model;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+
+import com.bridgelabz.fundoo.note.model.Note;
 
 @Entity
 @Table(name="user")
@@ -46,13 +53,28 @@ public class User{
 	
 	private String profileImage;
 	
+	@ManyToMany
+	@JoinTable(name = "collaborate_user",
+	   joinColumns = { @JoinColumn(name = "user_id")},
+	   inverseJoinColumns = { @JoinColumn(name = "note_id")})
+	private Set<Note> collaboratedNote;
+	
 //	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
 //	@JoinColumn(name="use_id")//,referencedColumnName="userId")
 //	private List<Note> notes;
 	
+	
 	public User() 
 	{
 		
+	}
+
+	public Set<Note> getCollaboratedNote() {
+		return collaboratedNote;
+	}
+
+	public void setCollaboratedNote(Set<Note> collaboratedNote) {
+		this.collaboratedNote = collaboratedNote;
 	}
 
 	public String getPassword() {

@@ -2,6 +2,8 @@ package com.bridgelabz.fundoo.note.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,8 @@ public class NoteServiceImplimentation implements NoteService{
 	@Autowired
 	private Response response;
 	
+//	@Autowired
+//	private DateTimeFormatter formatter;
 //	@Autowired
 //	private StatusUtil statusUtil; 
 	
@@ -226,6 +230,68 @@ public class NoteServiceImplimentation implements NoteService{
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
 			return response;
 		}
+	}
+
+	@Override
+	public Response remainder(Long noteId, String token, LocalDateTime date) throws Exception {
+		logger.info("Remainder Service");
+		logger.info("Date:"+date);
+		Note note = noteRepository.findById(noteId).get();
+		Long userId = UserToken.tokenVerify(token);
+		if(note.getUser().getUserId() == userId) {
+			
+		//	Create a DateTimeFormatter with your required format:
+			//DateTimeFormatter dateTimeFormat = new DateTimeFormatter(DateTimeFormatter.BASIC_ISO_DATE);
+
+		//	Next parse the date from the @RequestParam, specifying the TO type as a TemporalQuery:
+			//LocalDateTime date1 = dateTimeFormat.parse(date, LocalDateTime::from);
+			
+//			LocalDateTime date1 = LocalDateTime.parse(date, formatter);
+			
+			//LocalDateTime date1 = LocalDateTime.parse(date, LocalDateTime::from);
+			
+			note.setRemainder(date);
+			note.setLastModifiedStamp(LocalDateTime.now());
+			noteRepository.save(note);
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.remainder.add.success"), environment.getProperty("status.code.success"));
+			return response;
+		}
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+		return response;
+	}
+
+	@Override
+	public Response removeRemainder(Long noteId, String token) throws Exception {
+		logger.info("Remove remainder service");
+		Note note = noteRepository.findById(noteId).get();
+		Long userId = UserToken.tokenVerify(token);
+		if(userId == note.getUser().getUserId()) {
+			note.setRemainder(null);
+			note.setLastModifiedStamp(LocalDateTime.now());
+			noteRepository.save(note);
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.remainder.remove.success"), environment.getProperty("status.code.success"));
+			return response;
+		}
+		else {
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+			return response;
+		}
+		
+	}
+
+	@Override
+	public Response addCollaborator(Long noteId, String email,String token) throws Exception {
+		logger.info("Add collaborator Service");
+		Long userId = UserToken.tokenVerify(token);
+		User user = userRepository.findByEmail(email).get();
+		User ownerUser = userRepository.findByUserId(userId);
+		Note note = noteRepository.findById(noteId).get();
+		user.getCollaboratedNote().add(note);
+		note.getCollaboratedUser().add(user);
+		userRepository.save(user);
+		noteRepository.save(note);
+		Response response = StatusUtil.statusInfo(environment.getProperty("status.note.remainder.remove.success"), environment.getProperty("status.code.success"));
+		return response;
 	}
 }	
 	

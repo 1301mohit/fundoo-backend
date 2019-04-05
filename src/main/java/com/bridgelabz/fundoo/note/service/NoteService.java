@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.note.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.bridgelabz.fundoo.note.dto.NoteDto;
@@ -18,4 +19,7 @@ public interface NoteService {
 //	public void delete(Long noteId);
 //	public void update(Long noteId);
 	public Response restoreNote(Long noteId, String token) throws Exception;
+	public Response remainder(Long noteId, String token, LocalDateTime date) throws Exception;
+	public Response removeRemainder(Long noteId, String token) throws Exception;
+	public Response addCollaborator(Long noteId, String email, String token) throws Exception;
 }

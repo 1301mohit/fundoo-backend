@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.applicationconfig;
 
+import java.time.format.DateTimeFormatter;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,5 +31,11 @@ public class ApplicationConfiguration {
 	{ 
 		return new BCryptPasswordEncoder(); 
 	}
+	
+//	@Bean
+//	public DateTimeFormatter getDateTimeFormatter() {
+//		
+//		return new DateTimeFormatter();
+//	}
 	
 }

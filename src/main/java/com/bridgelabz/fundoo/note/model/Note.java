@@ -68,6 +68,19 @@ public class Note {
 	inverseJoinColumns = { @JoinColumn(name = "label_id") })
 	private Set<Label> label;
 	
+	@ManyToMany
+	@JoinTable(name = "collaborate_user",
+			   joinColumns = { @JoinColumn(name = "note_id")},
+			   inverseJoinColumns = { @JoinColumn(name = "user_id")})
+	private Set<User> collaboratedUser;
+	
+	
+	public Set<User> getCollaboratedUser() {
+		return collaboratedUser;
+	}
+	public void setCollaboratedUser(Set<User> collaboratedUser) {
+		this.collaboratedUser = collaboratedUser;
+	}
 	public Long getNoteId() {
 		return noteId;
 	}

@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.note.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -117,6 +119,30 @@ public class NoteController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping("/addRemainder/{noteId}")
+	public ResponseEntity<Response> remainder(@PathVariable Long noteId, @RequestHeader("token") String token, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) throws Exception{
+		logger.info("Token:"+token);
+		logger.info("Date"+date);
+		logger.info("NoteId"+noteId); 
+		Response response = noteServices.remainder(noteId,token,date);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteRemainder/{noteId}")
+	public ResponseEntity<Response> removeRemainder(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+		logger.info("Token:"+token);
+		logger.info("NoteId",+noteId);
+		Response response = noteServices.removeRemainder(noteId,token);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/addCollaborator/{noteId}")
+	public ResponseEntity<Response> addCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) throws Exception{
+		logger.info("Token"+token);
+		logger.info("Note"+noteId);
+		Response response = noteServices.addCollaborator(noteId,email,token);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){
 //		logger.info("noteId:"+noteId);
@@ -134,5 +160,6 @@ public class NoteController {
 //		return list;
 //	}
 	
+//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	
 }
