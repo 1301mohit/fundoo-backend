@@ -17,6 +17,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import com.bridgelabz.fundoo.note.model.Note;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="user")
@@ -53,11 +54,15 @@ public class User{
 	
 	private String profileImage;
 	
-	@ManyToMany
-	@JoinTable(name = "collaborate_user",
-	   joinColumns = { @JoinColumn(name = "user_id")},
-	   inverseJoinColumns = { @JoinColumn(name = "note_id")})
+//	@ManyToMany
+//	@JoinTable(name = "collaborate_user",
+//	   joinColumns = { @JoinColumn(name = "user_id")},
+//	   inverseJoinColumns = { @JoinColumn(name = "note_id")})
+//	private Set<Note> collaboratedNote;
+	@ManyToMany(mappedBy="collaboratedUser")
+	@JsonIgnore
 	private Set<Note> collaboratedNote;
+
 	
 //	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
 //	@JoinColumn(name="use_id")//,referencedColumnName="userId")

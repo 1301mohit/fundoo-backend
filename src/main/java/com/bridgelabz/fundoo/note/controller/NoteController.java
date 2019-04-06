@@ -2,8 +2,7 @@ package com.bridgelabz.fundoo.note.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +27,7 @@ import com.bridgelabz.fundoo.note.dto.NoteDto;
 import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.service.NoteService;
 import com.bridgelabz.fundoo.response.Response;
+import com.bridgelabz.fundoo.user.model.User;
 
 //import lombok.extern.slf4j.Slf4j;
 
@@ -120,7 +119,7 @@ public class NoteController {
 	}
 	
 	@PostMapping("/addRemainder/{noteId}")
-	public ResponseEntity<Response> remainder(@PathVariable Long noteId, @RequestHeader("token") String token, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) throws Exception{
+	public ResponseEntity<Response> remainder(@PathVariable Long noteId, @RequestHeader("token") String token, @RequestParam String date) throws Exception{
 		logger.info("Token:"+token);
 		logger.info("Date"+date);
 		logger.info("NoteId"+noteId); 
@@ -139,9 +138,28 @@ public class NoteController {
 	@PostMapping("/addCollaborator/{noteId}")
 	public ResponseEntity<Response> addCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) throws Exception{
 		logger.info("Token"+token);
-		logger.info("Note"+noteId);
+		logger.info("NoteId"+noteId);
+		logger.info("Email"+email);
 		Response response = noteServices.addCollaborator(noteId,email,token);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/removeCollaborator/{noteId}")
+	public ResponseEntity<Response> removeCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) throws Exception{
+		logger.info("Remove Collaborator");
+		logger.info("Token"+token);
+		logger.info("Email"+email);
+		logger.info("NoteId"+noteId);
+		Response response = noteServices.removeCollaborator(noteId,email,token);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllCollaborator")
+	public ResponseEntity<Set<User>> getAllCollaborator(@RequestParam Long noteId,@RequestHeader("token") String token) throws Exception{
+		logger.info("Get all collaborator");
+		logger.info("Token"+token);
+		Set<User> listOfUser = noteServices.getAllCollaborator(noteId,token);
+		return new ResponseEntity<>(listOfUser, HttpStatus.OK);
 	}
 	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){

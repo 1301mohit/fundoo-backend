@@ -2,6 +2,7 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class Note {
 	private String color;
 	private boolean isArchive;
 	private boolean isTrash;
-	private LocalDateTime remainder;
+	private Date remainder;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
@@ -141,10 +142,10 @@ public class Note {
 	public void setTrash(boolean isTrash) {
 		this.isTrash = isTrash;
 	}
-	public LocalDateTime getRemainder() {
+	public Date getRemainder() {
 		return remainder;
 	}
-	public void setRemainder(LocalDateTime remainder) {
+	public void setRemainder(Date remainder) {
 		this.remainder = remainder;
 	}
 	

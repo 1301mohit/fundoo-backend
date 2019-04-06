@@ -1,12 +1,16 @@
 package com.bridgelabz.fundoo.note.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 //import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -233,13 +237,14 @@ public class NoteServiceImplimentation implements NoteService{
 	}
 
 	@Override
-	public Response remainder(Long noteId, String token, LocalDateTime date) throws Exception {
+	public Response remainder(Long noteId, String token, String date) throws Exception {
 		logger.info("Remainder Service");
 		logger.info("Date:"+date);
 		Note note = noteRepository.findById(noteId).get();
 		Long userId = UserToken.tokenVerify(token);
 		if(note.getUser().getUserId() == userId) {
-			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+			Date date1 = dateFormat.parse(date);
 		//	Create a DateTimeFormatter with your required format:
 			//DateTimeFormatter dateTimeFormat = new DateTimeFormatter(DateTimeFormatter.BASIC_ISO_DATE);
 
@@ -250,7 +255,7 @@ public class NoteServiceImplimentation implements NoteService{
 			
 			//LocalDateTime date1 = LocalDateTime.parse(date, LocalDateTime::from);
 			
-			note.setRemainder(date);
+			note.setRemainder(date1);
 			note.setLastModifiedStamp(LocalDateTime.now());
 			noteRepository.save(note);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.remainder.add.success"), environment.getProperty("status.code.success"));
@@ -284,14 +289,57 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("Add collaborator Service");
 		Long userId = UserToken.tokenVerify(token);
 		User user = userRepository.findByEmail(email).get();
-		User ownerUser = userRepository.findByUserId(userId);
 		Note note = noteRepository.findById(noteId).get();
-		user.getCollaboratedNote().add(note);
-		note.getCollaboratedUser().add(user);
-		userRepository.save(user);
-		noteRepository.save(note);
-		Response response = StatusUtil.statusInfo(environment.getProperty("status.note.remainder.remove.success"), environment.getProperty("status.code.success"));
-		return response;
+		//User ownerUser = userRepository.findByUserId(userId);
+		if(userId == note.getUser().getUserId()) {
+			user.getCollaboratedNote().add(note);
+			note.getCollaboratedUser().add(user);
+			userRepository.save(user);
+			noteRepository.save(note);
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.collaborator.add.success"), environment.getProperty("status.code.success"));
+			return response;
+		}
+		else {
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+			return response;
+		}	
+	}
+	
+	public Response removeCollaborator(Long noteId, String email, String token) throws Exception{
+		logger.info("Remove collaborator Service");
+		Long userId = UserToken.tokenVerify(token);
+		User user = userRepository.findByEmail(email).get();
+		Note note = noteRepository.findById(noteId).get();
+		//User ownerUser = userRepository.findByUserId(userId);
+		if(userId == note.getUser().getUserId()) {
+			user.getCollaboratedNote().remove(note);
+			note.getCollaboratedUser().remove(user);
+			userRepository.save(user);
+			noteRepository.save(note);
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.collaborator.remove.success"), environment.getProperty("status.code.success"));
+			return response;
+		}
+		else {
+			Response response = StatusUtil.statusInfo(environment.getProperty("status.user.verify"), environment.getProperty("status.code.error"));
+			return response;
+		}
+	}
+	
+	public Set<User> getAllCollaborator(Long noteId,String token) throws Exception {
+		logger.info("Get all collaborator Service");
+		Long userId = UserToken.tokenVerify(token);
+		Optional<Note> note = noteRepository.findById(noteId);
+		//if(note.get().getUser().getUserId() == userId) {
+		Set<User> user2 = note.get().getCollaboratedUser();
+		return user2;
+	//	}
+		
+	//	Set<User> user2 = note.get().getCollaboratedUser();
+//		List<User> collaborator = new ArrayList<User>();
+//		for(int i=0; i< notes.size(); i++) {
+//			collaborator.add(notes.get(i).getUser());
+//		}
+	//	return user2;
 	}
 }	
 	
