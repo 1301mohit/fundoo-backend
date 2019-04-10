@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.exception.NoteException;
+import com.bridgelabz.fundoo.exception.UserException;
+import com.bridgelabz.fundoo.exception.exceptionhandler.FundooExceptionHandler;
 import com.bridgelabz.fundoo.note.dto.NoteDto;
 import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.repository.NoteRepository;
@@ -76,9 +80,10 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("NoteId:"+noteId);
 		logger.info("Token:"+token);
 		Long userId = UserToken.tokenVerify(token);
-		Optional<Note> noteAvailable = noteRepository.findById(noteId);
-		Note note = noteAvailable.get();
-		if(userId == note.getUser().getUserId() && noteAvailable.isPresent()) {
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> noteAvailable = noteRepository.findById(noteId);
+		//Note note = noteAvailable.get();
+		if(userId == note.getUser().getUserId()) {
 			note.setLastModifiedStamp(LocalDateTime.now());
 			note.setLastModifiedStamp(LocalDateTime.now());
 			note.setTitle(noteDto.getTitle());
@@ -95,10 +100,11 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("noteId:"+noteId);
 		logger.trace("Add note in trash");
 		Long userId = UserToken.tokenVerify(token);
-		Optional<Note> note = noteRepository.findById(noteId);
-		if(note.get().getUser().getUserId() == userId) {
-			note.get().setTrash(true);
-			noteRepository.save(note.get());
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> note = noteRepository.findById(noteId);
+		if(note.getUser().getUserId() == userId) {
+			note.setTrash(true);
+			noteRepository.save(note);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.trash.success"), environment.getProperty("status.code.success"));
 			return response;
 		}
@@ -109,11 +115,14 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response deleteNote(Long noteId, String token) throws Exception {
 		logger.info("noteId:"+noteId);
 		logger.info("Permanently delete note");
-		Optional<Note> note = noteRepository.findById(noteId);
-		if(note.get().isTrash()) {
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> note = noteRepository.findById(noteId);
+		if(note.isTrash()) {
 			Long userId = UserToken.tokenVerify(token);
-			if(userId == note.get().getUser().getUserId()) {
-				noteRepository.delete(note.get());
+			if(userId == note.getUser().getUserId()) {
+			//	note.getLabel().forEach(label -> label.getNotes().remove(note));
+			//	note.getCollaboratedUser().forEach(user -> user.getCollaboratedNote().remove(note));
+				noteRepository.delete(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.delete.success"), environment.getProperty("status.code.success"));
 				return response;
 			}
@@ -132,19 +141,20 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response pinNote(Long noteId, String token) throws Exception {
 		logger.info("noteId:"+noteId);
 		logger.info("Token:"+token);
-		Optional<Note> note = noteRepository.findById(noteId);
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> note = noteRepository.findById(noteId);
 		Long userId = UserToken.tokenVerify(token);
-		if(userId == note.get().getUser().getUserId()) {
-			if(note.get().isPinned()) {
-				note.get().setPinned(false);
-				noteRepository.save(note.get());
+		if(userId == note.getUser().getUserId()) {
+			if(note.isPinned()) {
+				note.setPinned(false);
+				noteRepository.save(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.unpin.note"), environment.getProperty("status.code.success"));
 				//Response response = StatusUtil.statusInfo("Note unpin", "201");
 				return response;
 			}
 			else {
-				note.get().setPinned(true);
-				noteRepository.save(note.get());
+				note.setPinned(true);
+				noteRepository.save(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.pin.note"), environment.getProperty("status.code.success"));
 				//Response response = StatusUtil.statusInfo("Note pin", "201");
 				return response;
@@ -160,19 +170,20 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response archiveNote(Long noteId, String token) throws Exception {
 		logger.info("noteId:"+noteId);
 		logger.info("Token:"+token);
-		Optional<Note> note = noteRepository.findById(noteId);
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> note = noteRepository.findById(noteId);
 		Long userId = UserToken.tokenVerify(token);
-		if(userId == note.get().getUser().getUserId()) {
-			if(note.get().isArchive()) {
-				note.get().setArchive(false);
-				noteRepository.save(note.get());
+		if(userId == note.getUser().getUserId()) {
+			if(note.isArchive()) {
+				note.setArchive(false);
+				noteRepository.save(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.not.archive.note"), environment.getProperty("status.code.success"));
 				return response;
 			}
 			else
 			{
-				note.get().setArchive(true);
-				noteRepository.save(note.get());
+				note.setArchive(true);
+				noteRepository.save(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.archive.note"), environment.getProperty("status.code.success"));
 				return response;
 			}
@@ -189,12 +200,17 @@ public class NoteServiceImplimentation implements NoteService{
 		Long userId = UserToken.tokenVerify(token);
 		List<Note> listOfNote = noteRepository.findAll();
 		List<Note> list = new ArrayList<Note>();
+		Optional<User> user = userRepository.findById(userId);
+		
+		List<Note> collaboratedNote = user.get().getCollaboratedNote().stream().collect(Collectors.toList());
+		
 		for(int i=0; i<listOfNote.size(); i++) {
 			if(userId == listOfNote.get(i).getUser().getUserId()) {
 				System.out.println("listOfNotes"+listOfNote.get(i));
 				list.add(listOfNote.get(i));
 			}
 		}
+		list.addAll(collaboratedNote);
 		System.out.println("list:"+list);
 		return list;
 	}
@@ -203,12 +219,13 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("noteId"+noteId);
 		logger.info("color"+color);
 		logger.info("Token"+token);
-		Optional<Note> note = noteRepository.findById(noteId);
-		Note note1 = note.get();
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Optional<Note> note = noteRepository.findById(noteId);
+	//	Note note1 = note.get();
 		Long userId = UserToken.tokenVerify(token);
-		if(userId == note.get().getUser().getUserId()) {
-			note1.setColor(color);
-			noteRepository.save(note1);
+		if(userId == note.getUser().getUserId()) {
+			note.setColor(color);
+			noteRepository.save(note);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.note.color"), environment.getProperty("status.code.success"));
 			return response;
 		}
@@ -222,7 +239,8 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response restoreNote(Long noteId, String token) throws Exception {
 		logger.info("Restore note in Service");
 		Long userId = UserToken.tokenVerify(token);
-		Note note = noteRepository.findById(noteId).get();
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Note note = noteRepository.findById(noteId).get();
 		if(userId == note.getUser().getUserId()) {
 			note.setTrash(false);
 			note.setLastModifiedStamp(LocalDateTime.now());
@@ -240,7 +258,8 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response remainder(Long noteId, String token, String date) throws Exception {
 		logger.info("Remainder Service");
 		logger.info("Date:"+date);
-		Note note = noteRepository.findById(noteId).get();
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+		//Note note = noteRepository.findById(noteId).get();
 		Long userId = UserToken.tokenVerify(token);
 		if(note.getUser().getUserId() == userId) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -268,7 +287,8 @@ public class NoteServiceImplimentation implements NoteService{
 	@Override
 	public Response removeRemainder(Long noteId, String token) throws Exception {
 		logger.info("Remove remainder service");
-		Note note = noteRepository.findById(noteId).get();
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException("status.note.absent"));
+	//	Note note = noteRepository.findById(noteId).get();
 		Long userId = UserToken.tokenVerify(token);
 		if(userId == note.getUser().getUserId()) {
 			note.setRemainder(null);
@@ -288,9 +308,9 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response addCollaborator(Long noteId, String email,String token) throws Exception {
 		logger.info("Add collaborator Service");
 		Long userId = UserToken.tokenVerify(token);
-		User user = userRepository.findByEmail(email).get();
-		Note note = noteRepository.findById(noteId).get();
-		//User ownerUser = userRepository.findByUserId(userId);
+		User user = userRepository.findByEmail(email).orElseThrow(()->new UserException(environment.getProperty("status.user.absent")));
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException(environment.getProperty("status.user.absent")));
+		//Note note = noteRepository.findById(noteId).get();
 		if(userId == note.getUser().getUserId()) {
 			user.getCollaboratedNote().add(note);
 			note.getCollaboratedUser().add(user);
@@ -308,9 +328,9 @@ public class NoteServiceImplimentation implements NoteService{
 	public Response removeCollaborator(Long noteId, String email, String token) throws Exception{
 		logger.info("Remove collaborator Service");
 		Long userId = UserToken.tokenVerify(token);
-		User user = userRepository.findByEmail(email).get();
-		Note note = noteRepository.findById(noteId).get();
-		//User ownerUser = userRepository.findByUserId(userId);
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserException(environment.getProperty("status.user.absent")));
+		Note note = noteRepository.findById(noteId).orElseThrow(() -> new NoteException(environment.getProperty("status.user.absent")));
+	//	Note note = noteRepository.findById(noteId).get();
 		if(userId == note.getUser().getUserId()) {
 			user.getCollaboratedNote().remove(note);
 			note.getCollaboratedUser().remove(user);
@@ -329,17 +349,8 @@ public class NoteServiceImplimentation implements NoteService{
 		logger.info("Get all collaborator Service");
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Note> note = noteRepository.findById(noteId);
-		//if(note.get().getUser().getUserId() == userId) {
 		Set<User> user2 = note.get().getCollaboratedUser();
 		return user2;
-	//	}
-		
-	//	Set<User> user2 = note.get().getCollaboratedUser();
-//		List<User> collaborator = new ArrayList<User>();
-//		for(int i=0; i< notes.size(); i++) {
-//			collaborator.add(notes.get(i).getUser());
-//		}
-	//	return user2;
 	}
 }	
 	
