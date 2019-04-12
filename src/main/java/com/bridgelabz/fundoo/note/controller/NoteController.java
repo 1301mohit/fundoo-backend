@@ -162,6 +162,16 @@ public class NoteController {
 		return new ResponseEntity<>(listOfUser, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getAllListOfNotes")
+	public ResponseEntity<List<Note>> getAllListOfNotes(@RequestHeader("token") String token, @RequestParam String isArchive, @RequestParam String isTrash) throws Exception{
+		logger.info("Get all list of notes");
+		logger.info("Token:"+token);
+		logger.info("Archive:"+isArchive);
+		logger.info("Trash:"+isTrash);
+		List<Note> notes = noteServices.getAllListOfNotes(token, isArchive, isTrash);
+		return new ResponseEntity<>(notes, HttpStatus.OK);
+	}
+	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){
 //		logger.info("noteId:"+noteId);
 //		logger.trace("token:"+token);

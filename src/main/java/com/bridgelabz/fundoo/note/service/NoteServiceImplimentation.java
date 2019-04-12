@@ -70,8 +70,8 @@ public class NoteServiceImplimentation implements NoteService{
 		note.setCreateStamp(LocalDateTime.now());
 		note.setUser(user.get());
 		noteRepository.save(note);
-		System.out.println(environment.getProperty("status.code.success"));
 		Response response = StatusUtil.statusInfo(environment.getProperty("status.add.success"), environment.getProperty("status.code.success"));
+	//	Response response = StatusUtil.statusInfo(environment.getProperty("status.add.success"), Integer.parseInt(environment.getProperty("status.code.success")));
 		return response;
 	}
 		
@@ -104,6 +104,7 @@ public class NoteServiceImplimentation implements NoteService{
 		//Optional<Note> note = noteRepository.findById(noteId);
 		if(note.getUser().getUserId() == userId) {
 			note.setTrash(true);
+			note.setArchive(false);
 			noteRepository.save(note);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.trash.success"), environment.getProperty("status.code.success"));
 			return response;
@@ -351,6 +352,23 @@ public class NoteServiceImplimentation implements NoteService{
 		Optional<Note> note = noteRepository.findById(noteId);
 		Set<User> user2 = note.get().getCollaboratedUser();
 		return user2;
+	}
+
+//	@Override
+//	public List<Note> getAllListOfNotes(String token, String isArchive, String isTrash) throws Exception {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+        @Override
+	public List<Note>  getAllListOfNotes(String token, String isArchive, String isTrash) throws Exception {
+		logger.info("Get all list of notes");
+		Long userId = UserToken.tokenVerify(token);
+		User user = userRepository.findById(userId).get();
+		List<Note> collaboratedUser = user.getCollaboratedNote().stream().collect(Collectors.toList());
+		List<Note> listOfNotes = noteRepository.findAllNotesByUserId(userId,Boolean.valueOf(isArchive), Boolean.valueOf(isTrash)).get();
+		System.out.println("List of notes -->"+listOfNotes);
+		collaboratedUser.addAll(listOfNotes);
+		return collaboratedUser;
 	}
 }	
 	

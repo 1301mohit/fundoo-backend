@@ -26,4 +26,5 @@ public interface NoteService {
 	public Response addCollaborator(Long noteId, String email, String token) throws Exception;
 	public Response removeCollaborator(Long noteId, String email, String token) throws Exception;
 	public Set<User> getAllCollaborator(Long noteId,String token) throws Exception;
+	public List<Note> getAllListOfNotes(String token, String isArchive, String isTrash) throws Exception;
 }
