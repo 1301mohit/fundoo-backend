@@ -15,10 +15,10 @@ public class MessageProducer {
 	@Autowired
     private AmqpTemplate rabbitTemplate;
  
-	public void sendMessage(String message) {
+	public void sendMessage(RabbitMqBody body) {
 		System.out.println(new Date());
-		rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE,RabbitMqConfig.ROUTING_KEY, message);
-//		System.out.println("Is listener returned ::: "+rabbitTemplate.isReturnListener());
+		rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE,RabbitMqConfig.ROUTING_KEY, body);
+	System.out.println("Is listener returned ::: "+body);
 		System.out.println(new Date());
 	}
  

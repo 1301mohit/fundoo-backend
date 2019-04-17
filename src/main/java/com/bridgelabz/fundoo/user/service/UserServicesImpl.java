@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bridgelabz.fundoo.RabbitMq.MessageProducer;
+import com.bridgelabz.fundoo.RabbitMq.RabbitMqBody;
 import com.bridgelabz.fundoo.exception.UserException;
 //import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
@@ -46,6 +48,9 @@ public class UserServicesImpl implements UserServices {
 	
 	@Autowired 
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private RabbitMqBody rabbitMqBody;
 	 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -55,6 +60,9 @@ public class UserServicesImpl implements UserServices {
 	
 	@Autowired
 	private MessageServiceImpl messageServiceImpl;
+	
+	@Autowired
+	private MessageProducer messageProcedure;
 	
 	private final Path fileLocation = Paths.get("/home/admin-122/FundooFile");
 	//Response response =new Response();
@@ -93,8 +101,14 @@ public class UserServicesImpl implements UserServices {
 		//save user data in data base
 	    user = userRepository.save(user);
 	    
+//	    rabbitMqBody.setSubject("Verify emailId");
+//	    rabbitMqBody.setToEmailId(user.getEmail());
+//	    String userActivationLink = Utility.getUrl(user.getUserId());
+//	    rabbitMqBody.setUrl(userActivationLink);
+	    messageProcedure.sendMessage(rabbitMqBody);
+	    
 //	    EmailUtil.send(user.getEmail(), environment.getProperty("status.register.mailForRegistration"), getUrl(user.getuserId()));
-	    messageServiceImpl.sendEmail(user);
+//	    messageServiceImpl.sendEmail(user);
 	    Response response = StatusUtil.statusInfo(environment.getProperty("status.register.successful"), environment.getProperty("status.code.success"));
 	    //response.setStatusCode(environment.getProperty("status.code.success"));
 	    //response.setStatusMessage(environment.getProperty("status.register.successful"));

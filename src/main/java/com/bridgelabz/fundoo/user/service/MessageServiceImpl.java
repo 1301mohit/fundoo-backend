@@ -20,29 +20,43 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private Environment environment;
 	
-	@Autowired
-	private MessageProducer messageProcedure;
-	
-	@Autowired
-	private RabbitMqBody rabitMqBody;
+//	@Autowired
+//	private MessageProducer messageProcedure;
+//	
+//	@Autowired
+//	private RabbitMqBody rabitMqBody;
 
 	@Override
-	public void sendEmail(User user) throws Exception {
+//	public void sendEmail(RabbitMqBody rabbitMqBody) throws Exception {
+	public void sendEmail(String userId,String userEmail) throws Exception{
 		System.out.println("Send email");
 		SimpleMailMessage mail = new SimpleMailMessage();
-		rabitMqBody.setToEmailId(user.getEmail());
-	//	rabitMqBody.setFromEmailId(environment.getProperty("spring.mail.username"));
-		rabitMqBody.setSubject(environment.getProperty("status.register.mail.registration"));
-//		mail.setTo(user.getEmail());
-//		mail.setFrom(environment.getProperty("spring.mail.username"));
-//		mail.setSubject(environment.getProperty("status.register.mail.registration"));
-		String userActivationLink = Utility.getUrl(user.getUserId());
-		rabitMqBody.setUrl(userActivationLink);
-		System.out.println("Useractivationlink:"+userActivationLink);
-		//mail.setText(userActivationLink);
+		mail.setTo(userEmail);
+		mail.setSubject(environment.getProperty("status.register.mail.registration"));
+		String userActivationLink = Utility.getUrl(userId);
+		mail.setText(userActivationLink);
 		System.out.println("Message is ready");
-		messageProcedure.sendMessage(userActivationLink);
-	//	javaMailSender.send(mail);
+		javaMailSender.send(mail);
 		System.out.println("Message is sent");
 	}
 }
+//		System.out.println("Send email");
+//		SimpleMailMessage mail = new SimpleMailMessage();
+//	//	rabitMqBody.setToEmailId(user.getEmail());
+//	//	rabitMqBody.setFromEmailId(environment.getProperty("spring.mail.username"));
+//	//	rabitMqBody.setSubject(environment.getProperty("status.register.mail.registration"));
+//		mail.setTo(rabbitMqBody.getToEmailId());
+////		mail.setFrom(environment.getProperty("spring.mail.username"));
+//		mail.setSubject(environment.getProperty("status.register.mail.registration"));
+//	//	String userActivationLink = Utility.getUrl(user.getUserId);
+//		String userActivationLink = rabbitMqBody.getUrl();
+//		//rabitMqBody.setUrl(userActivationLink);
+//		System.out.println("Useractivationlink:"+userActivationLink);
+//		mail.setText(userActivationLink);
+//		System.out.println("Message is ready");
+//	//	messageProcedure.sendMessage(userActivationLink);
+//		javaMailSender.send(mail);
+//	//	messageProcedure.sendMessage(rabitMqBody);
+//		System.out.println("Message is sent");
+//	}
+//}
