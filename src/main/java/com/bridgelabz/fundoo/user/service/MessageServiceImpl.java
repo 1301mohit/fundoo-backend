@@ -28,13 +28,13 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 //	public void sendEmail(RabbitMqBody rabbitMqBody) throws Exception {
-	public void sendEmail(String userId,String userEmail) throws Exception{
+	public void sendEmail(RabbitMqBody rabbitmqBody) throws Exception{
 		System.out.println("Send email");
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(userEmail);
-		mail.setSubject(environment.getProperty("status.register.mail.registration"));
-		String userActivationLink = Utility.getUrl(userId);
-		mail.setText(userActivationLink);
+		mail.setTo(rabbitmqBody.getToEmailId());
+		mail.setSubject(rabbitmqBody.getSubject());
+//		String userActivationLink = Utility.getUrl(userId);
+		mail.setText(rabbitmqBody.getUrl());
 		System.out.println("Message is ready");
 		javaMailSender.send(mail);
 		System.out.println("Message is sent");

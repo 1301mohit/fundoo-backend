@@ -61,8 +61,8 @@ public class Note {
 	
 	@ManyToMany
 	@JoinTable(name = "collaborate_user",
-			   joinColumns = { @JoinColumn(name = "note_id")},
-			   inverseJoinColumns = { @JoinColumn(name = "user_id")})
+	joinColumns = { @JoinColumn(name = "note_id")},
+	inverseJoinColumns = { @JoinColumn(name = "user_id")})
 	private Set<User> collaboratedUser;
 	
 	

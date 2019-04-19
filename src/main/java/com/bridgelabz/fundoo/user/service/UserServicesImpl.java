@@ -101,10 +101,11 @@ public class UserServicesImpl implements UserServices {
 		//save user data in data base
 	    user = userRepository.save(user);
 	    
-//	    rabbitMqBody.setSubject("Verify emailId");
-//	    rabbitMqBody.setToEmailId(user.getEmail());
-//	    String userActivationLink = Utility.getUrl(user.getUserId());
-//	    rabbitMqBody.setUrl(userActivationLink);
+	    rabbitMqBody.setSubject("Verify emailId");
+	    rabbitMqBody.setToEmailId(user.getEmail());
+	    String userActivationLink = Utility.getUrl(user.getUserId());
+	    rabbitMqBody.setUrl(userActivationLink);
+	    System.out.println("RabbitMqBody--------------------------->"+rabbitMqBody);
 	    messageProcedure.sendMessage(rabbitMqBody);
 	    
 //	    EmailUtil.send(user.getEmail(), environment.getProperty("status.register.mailForRegistration"), getUrl(user.getuserId()));
@@ -167,7 +168,13 @@ public class UserServicesImpl implements UserServices {
 		{
 			User user = userAvailable.get();
 			//EmailUtil.send(email, environment.getProperty("status.password.reset"), Utility.getBody(user, "user"));
-			messageServiceImpl.sendEmail(user);
+			RabbitMqBody rabbitmqBody = new RabbitMqBody();
+		//	rabbitmqBody.setToEmailId(user.getEmail());
+			rabbitmqBody.setToEmailId(user.getEmail());
+			rabbitmqBody.setSubject("password recovery link");
+			String url = Utility.getBody(user.getUserId(), "resetPassword");
+			rabbitmqBody.setUrl(url);
+			messageServiceImpl.sendEmail(rabbitmqBody);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.password.successful"), environment.getProperty("status.code.success"));
 			//response.setStatusCode(environment.getProperty("status.code.success"));
 			//response.setStatusMessage(environment.getProperty("status.password.successful"));

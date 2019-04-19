@@ -46,6 +46,14 @@ public class RabbitMqBody {
 		this.url = url;
 		this.subject = subject;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "RabbitMqBody [toEmailId=" + toEmailId + ", url=" + url + ", subject=" + subject + "]";
+	}
+	
+	
 //	@Override
 //	public String toString() {
 //		return "RabbitMqBody [fromEmailId=" + fromEmailId + ", toEmailId=" + toEmailId + ", url=" + url + ", subject="

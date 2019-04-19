@@ -22,7 +22,7 @@ public class MessageListenerImpl implements MessageListener{
 	private MessageService messageService;
 
 	@Override
-	public void onMessage(byte[] message) throws JsonParseException, JsonMappingException, IOException {
+	public void onMessage(byte[] message) throws Exception {
       
 		System.out.println(new Date());
 		try {
@@ -35,13 +35,14 @@ public class MessageListenerImpl implements MessageListener{
 		System.out.println("Message received:"+msg);
 		ObjectMapper mapper = new ObjectMapper();
 		rabbitMqBody = mapper.readValue(msg, RabbitMqBody.class);
-		messageService.sendEmail(rabbitMqBody.getUrl(),rabbitMqBody.getToEmailId());
+	//	messageService.sendEmail(rabbitMqBody.getUrl(),rabbitMqBody.getToEmailId());
+		messageService.sendEmail(rabbitMqBody);
 		
 //		String toEmailId = rabbitMqBody.getToEmailId();
 //		String url = rabbitMqBody.getUrl();
 //		String subject = rabbitMqBody.getSubject();
 		
-		messageService.sendEmail(rabbitMqBody);
+	//	messageService.sendEmail(rabbitMqBody);
 		
 		System.out.println(new Date());
 	}
