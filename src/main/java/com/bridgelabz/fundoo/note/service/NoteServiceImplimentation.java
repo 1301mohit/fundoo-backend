@@ -21,6 +21,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.elasticSearch.ElasticSearch;
 import com.bridgelabz.fundoo.exception.NoteException;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.exception.exceptionhandler.FundooExceptionHandler;
@@ -52,6 +53,9 @@ public class NoteServiceImplimentation implements NoteService{
 	@Autowired
 	private Response response;
 	
+	@Autowired
+	private ElasticSearch elasticSearch;
+	
 //	@Autowired
 //	private DateTimeFormatter formatter;
 //	@Autowired
@@ -69,7 +73,10 @@ public class NoteServiceImplimentation implements NoteService{
 		note.setLastModifiedStamp(LocalDateTime.now());
 		note.setCreateStamp(LocalDateTime.now());
 		note.setUser(user.get());
-		noteRepository.save(note);
+		Note note1=noteRepository.save(note);
+		System.out.println("Note in addNote:"+note1);
+		elasticSearch.createNote(note1);
+		System.out.println("elastic search");
 		Response response = StatusUtil.statusInfo(environment.getProperty("status.add.success"), environment.getProperty("status.code.success"));
 	//	Response response = StatusUtil.statusInfo(environment.getProperty("status.add.success"), Integer.parseInt(environment.getProperty("status.code.success")));
 		return response;
@@ -88,7 +95,8 @@ public class NoteServiceImplimentation implements NoteService{
 			note.setLastModifiedStamp(LocalDateTime.now());
 			note.setTitle(noteDto.getTitle());
 			note.setDescription(noteDto.getDescription());
-			noteRepository.save(note);
+			Note note1 = noteRepository.save(note);
+			elasticSearch.updateNote(note1);
 			Response response = StatusUtil.statusInfo(environment.getProperty("status.update.success"), environment.getProperty("status.code.success"));
 			return response;
 		}
@@ -121,9 +129,10 @@ public class NoteServiceImplimentation implements NoteService{
 		if(note.isTrash()) {
 			Long userId = UserToken.tokenVerify(token);
 			if(userId == note.getUser().getUserId()) {
-			//	note.getLabel().forEach(label -> label.getNotes().remove(note));
-			//	note.getCollaboratedUser().forEach(user -> user.getCollaboratedNote().remove(note));
+				note.getLabel().forEach(label -> label.getNotes().remove(note));
+				note.getCollaboratedUser().forEach(user -> user.getCollaboratedNote().remove(note));
 				noteRepository.delete(note);
+				elasticSearch.deleteNote(note);
 				Response response = StatusUtil.statusInfo(environment.getProperty("status.delete.success"), environment.getProperty("status.code.success"));
 				return response;
 			}
