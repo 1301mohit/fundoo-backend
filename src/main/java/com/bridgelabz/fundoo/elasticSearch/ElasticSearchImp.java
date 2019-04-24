@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.elasticSearch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,14 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,9 +64,46 @@ public class ElasticSearchImp implements ElasticSearch{
 		return response.getResult().name();
 	}
 	
-	public List<Note> search() {
-		 SearchRequest searchRequest = new SearchRequest();
-		 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		 
+	public List<Note> search(String query, Long userId) {
+		SearchRequest searchRequest = new SearchRequest(INDEX).types(TYPE);
+		
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+			.must(QueryBuilders.queryStringQuery(query).analyzeWildcard(true).field("title", 2.0f)
+			.field("description").field("label"))
+			.filter(QueryBuilders.termsQuery("user.userId", String.valueOf(userId)));
+
+			searchSourceBuilder.query(queryBuilder);
+
+			searchRequest.source(searchSourceBuilder);
+
+			SearchResponse searchResponse=null;
+			try {
+				searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+				System.out.println("Search response:"+searchResponse);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			List<Note> allnote = getSearchResult(searchResponse);
+		
+
+			return allnote;
+
 	}
+	
+	public List<Note> getSearchResult(SearchResponse response) {
+		SearchHit[] searchHits = response.getHits().getHits();
+		List<Note> notes = new ArrayList<>();
+		for (SearchHit hit : searchHits) {
+			notes.add(objectMapper.convertValue(hit.getSourceAsMap(), Note.class));
+		}
+		System.out.println("Notes in Search notes"+notes);
+		return notes;
+	}
+	
+	
 }

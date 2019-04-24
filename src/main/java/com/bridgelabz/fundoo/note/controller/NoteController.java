@@ -172,6 +172,15 @@ public class NoteController {
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getAllSearchNotes")
+	public ResponseEntity<List<Note>> getAllSearchNotes(@RequestHeader("token") String token, @RequestParam String query) throws Exception{
+		logger.info("Get all Search Notes");
+		logger.info("Token:"+token);
+		logger.info("Query"+query);
+		List<Note> notes = noteServices.getAllSearchNotes(token, query);
+		return new ResponseEntity<>(notes, HttpStatus.OK);
+	}
+	
 //	public ResponseEntity<Response> delete(@RequestParam Long noteId, @RequestParam String token){
 //		logger.info("noteId:"+noteId);
 //		logger.trace("token:"+token);

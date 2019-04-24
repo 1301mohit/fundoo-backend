@@ -379,6 +379,17 @@ public class NoteServiceImplimentation implements NoteService{
 		collaboratedUser.addAll(listOfNotes);
 		return collaboratedUser;
 	}
+
+		@Override
+		public List<Note> getAllSearchNotes(String token, String query) throws Exception {
+			logger.info("Get all search notes in Service");
+			Long userId = UserToken.tokenVerify(token);
+			List<Note> notes = elasticSearch.search(query, userId);
+			System.out.println("");
+			return notes;
+		}
+        
+    
 }	
 	
 	

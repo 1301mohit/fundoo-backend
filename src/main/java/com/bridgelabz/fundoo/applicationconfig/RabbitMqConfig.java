@@ -36,10 +36,11 @@ public class RabbitMqConfig {
 		 return new TopicExchange(EXCHANGE);
 	 }
 
- @Bean
- public Jackson2JsonMessageConverter producer() {
-	 return new Jackson2JsonMessageConverter();
- }
+	 @Bean
+	 public Jackson2JsonMessageConverter producer() {
+		 return new Jackson2JsonMessageConverter();
+	 }
+ 
 	 @Bean
 	 Binding binding(Queue queue, TopicExchange exchange) {
 		 return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
@@ -47,8 +48,7 @@ public class RabbitMqConfig {
 	 
 //	 For RabbitMQ listener
 	 @Bean
-	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-	 MessageListenerAdapter listenerAdapter) {
+	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 	  container.setConnectionFactory(connectionFactory);
 	  container.setQueueNames(ROUTING_KEY);
