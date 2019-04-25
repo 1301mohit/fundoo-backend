@@ -18,18 +18,23 @@ import com.bridgelabz.fundoo.RabbitMq.MessageListener;
 @Configuration
 public class RabbitMqConfig {
 	
-	 public static final String ROUTING_KEY = "queue.key";
+	 public static final String USER_ROUTING_KEY = "user.routing.key";
+	 
+	 public static final String USER_QUEUE_KEY = "user.queue.key";
 	 
 	 public static final String EXCHANGE = "queue.exchange";
 	 
-//	 public static final String queue = "queue.queue";
+	 public static final String NOTE_ROUTING_KEY = "note.routing.key";
+	 
+	 public static final String NOTE_QUEUE_KEY = "note.queue.key";
+
+	//private static final Queue noteQueue = null;
 
 	 
-	 @Bean
+	 @Bean(name="userQueue")
 	 Queue queue() {
-		 return new Queue(ROUTING_KEY, true);
+		 return new Queue(USER_QUEUE_KEY, true);
 	 }
-
 
 	 @Bean
 	 TopicExchange exchange() {
@@ -42,25 +47,35 @@ public class RabbitMqConfig {
 	 }
  
 	 @Bean
-	 Binding binding(Queue queue, TopicExchange exchange) {
-		 return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+	 Binding binding(Queue userQueue, TopicExchange exchange) {
+		 return BindingBuilder.bind(userQueue).to(exchange).with(USER_ROUTING_KEY);
 	 }
 	 
-//	 For RabbitMQ listener
-	 @Bean
-	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-	  container.setConnectionFactory(connectionFactory);
-	  container.setQueueNames(ROUTING_KEY);
-	  container.setMessageListener(listenerAdapter);
-	  return container;
+	 @Bean(name="noteQueue")
+	 Queue noteQueue() {
+		 return new Queue(NOTE_QUEUE_KEY, true);
 	 }
 
-
 	 @Bean
-	 MessageListenerAdapter myQueueListener(MessageListener listener) {
-	  return new MessageListenerAdapter(listener, "onMessage");
+	 Binding noteBinding(Queue noteQueue, TopicExchange exchange) {
+		 return BindingBuilder.bind(noteQueue).to(exchange).with(NOTE_ROUTING_KEY);
 	 }
+	 
+	// For RabbitMQ listener
+//	 @Bean
+//	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+//	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//	  container.setConnectionFactory(connectionFactory);
+//	  container.setQueueNames(USER_ROUTING_KEY);
+//	  container.setMessageListener(listenerAdapter);
+//	  return container;
+//	 }
+//
+//
+//	 @Bean
+//	 MessageListenerAdapter myQueueListener(MessageListener listener) {
+//	  return new MessageListenerAdapter(listener, "onMessage");
+//	 }
 	 
 }
 

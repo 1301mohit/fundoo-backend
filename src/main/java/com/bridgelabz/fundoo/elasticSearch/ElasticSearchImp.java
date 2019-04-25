@@ -39,6 +39,7 @@ public class ElasticSearchImp implements ElasticSearch{
 	
 	public String createNote(Note note) throws IOException {
 		
+		System.out.println("Create note in elastic Search");
 		Map<String, Object> noteMapper = objectMapper.convertValue(note, Map.class);
 		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, note.getNoteId().toString()).source(noteMapper);
 		IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);

@@ -17,8 +17,15 @@ public class MessageProducer {
  
 	public void sendMessage(RabbitMqBody body) {
 		System.out.println(new Date());
-		rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE,RabbitMqConfig.ROUTING_KEY, body);
+		rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE,RabbitMqConfig.USER_ROUTING_KEY, body);
 	    System.out.println("Is listener returned ::: "+body);
+		System.out.println(new Date());
+	}
+	
+	public void sendMessageForSearch(SearchNoteBody body) {
+		System.out.println(new Date());
+		rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE, RabbitMqConfig.NOTE_ROUTING_KEY, body);
+		System.out.println("Is listener returned ::: "+body);
 		System.out.println(new Date());
 	}
  

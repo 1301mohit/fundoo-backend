@@ -44,8 +44,10 @@ public class User{
 	@NotEmpty(message="please fill the password")
 	private String password;
 	
+	@JsonIgnore
 	private LocalDate registeredDate;
 	
+	@JsonIgnore
 	private LocalDate accountUpdateDate;
 	
 	private boolean isVerification;

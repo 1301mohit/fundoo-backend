@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.bridgelabz.fundoo.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "note")
@@ -31,8 +32,13 @@ public class Note {
 	private String title;
 	
 	private String description;
+	
+	@JsonIgnore
 	private LocalDateTime createStamp; //= LocalDate.now();
+	
+	@JsonIgnore
 	private LocalDateTime lastModifiedStamp; //= LocalDate.now();
+	
 	private boolean isPinned;
 	private String color;
 	private boolean isArchive;
