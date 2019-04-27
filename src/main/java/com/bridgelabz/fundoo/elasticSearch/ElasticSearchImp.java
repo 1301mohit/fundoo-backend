@@ -71,7 +71,7 @@ public class ElasticSearchImp implements ElasticSearch{
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		
 		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-			.must(QueryBuilders.queryStringQuery(query).analyzeWildcard(true).field("title", 2.0f)
+			.must(QueryBuilders.queryStringQuery("*"+query+"*").analyzeWildcard(true).field("title", 2.0f)
 			.field("description").field("label"))
 			.filter(QueryBuilders.termsQuery("user.userId", String.valueOf(userId)));
 

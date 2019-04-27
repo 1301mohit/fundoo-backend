@@ -2,6 +2,6 @@ package com.bridgelabz.fundoo.RabbitMq;
 
 public enum SearchNoteOperation {
 
-	CREATE,DELETE,UPDATE,SEARCH
+	CREATE,DELETE,UPDATE
 	
 }

@@ -61,21 +61,21 @@ public class RabbitMqConfig {
 		 return BindingBuilder.bind(noteQueue).to(exchange).with(NOTE_ROUTING_KEY);
 	 }
 	 
-	// For RabbitMQ listener
-//	 @Bean
-//	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-//	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//	  container.setConnectionFactory(connectionFactory);
-//	  container.setQueueNames(USER_ROUTING_KEY);
-//	  container.setMessageListener(listenerAdapter);
-//	  return container;
-//	 }
-//
-//
-//	 @Bean
-//	 MessageListenerAdapter myQueueListener(MessageListener listener) {
-//	  return new MessageListenerAdapter(listener, "onMessage");
-//	 }
+//	 For RabbitMQ listener
+	 @Bean
+	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+	  container.setConnectionFactory(connectionFactory);
+	  container.setQueueNames(USER_ROUTING_KEY);
+	  container.setMessageListener(listenerAdapter);
+	  return container;
+	 }
+
+
+	 @Bean
+	 MessageListenerAdapter myQueueListener(MessageListener listener) {
+	  return new MessageListenerAdapter(listener, "onMessage");
+	 }
 	 
 }
 
