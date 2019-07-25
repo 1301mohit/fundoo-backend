@@ -6,11 +6,14 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.auth0.jwt.interfaces.Verification;
-//@UtilityClass
+import com.bridgelabz.fundoo.exception.TokenException;
+
+
+
 public class UserToken {
 	
 	public static final String TOKEN_SECRET="gh2we43jue";
-	public static String generateToken(Long id) throws Exception
+	public static String generateToken(Long id)
 	{
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
@@ -21,11 +24,12 @@ public class UserToken {
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Token Not Generated");
+			//throw new Exception("Token Not Generated");
+			throw new TokenException("Token Not Generated");
 		}
 	}
 	
-	public static Long tokenVerify(String token) throws Exception	
+	public static Long tokenVerify(String token)	
 	{
 		Long userid;
 		try {
@@ -34,17 +38,14 @@ public class UserToken {
 			DecodedJWT decodedjwt=jwtverifier.verify(token);
 			Claim claim=decodedjwt.getClaim("id");
 			userid=claim.asLong();	
-			//System.out.println(userid);
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Token Not Verified");
+			//throw new Exception("Token Not Verified");
+			throw new TokenException("Token Not Verified");
 		}
 		
 		return userid;
 	}
 
-//	public String getBody(User user) throws Exception {
-//		return ("http://localhost:8080/verify/"+UserToken.generateToken(user.getId()));
-//	}
 }

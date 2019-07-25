@@ -1,6 +1,5 @@
 package com.bridgelabz.fundoo.exception.exceptionhandler;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,13 +11,9 @@ import com.bridgelabz.fundoo.exception.TokenException;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.util.StatusUtil;
-import com.bridgelabz.fundoo.util.Utility;
 
 @RestControllerAdvice
 public class FundooExceptionHandler {
-	
-//	@Autowired
-//	Utility util;
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> globalExceptionHandler(Exception e)

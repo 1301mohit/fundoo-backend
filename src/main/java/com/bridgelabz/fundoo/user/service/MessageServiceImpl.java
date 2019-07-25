@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,6 +13,7 @@ import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.util.Utility;
 
 @Service
+@PropertySource("classpath:message.properties")
 public class MessageServiceImpl implements MessageService {
 	
 	@Autowired
@@ -20,26 +22,31 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private Environment environment;
 	
-//	@Autowired
-//	private MessageProducer messageProcedure;
-//	
-//	@Autowired
-//	private RabbitMqBody rabitMqBody;
-
-	@Override
-//	public void sendEmail(RabbitMqBody rabbitMqBody) throws Exception {
-	public void sendEmail(RabbitMqBody rabbitmqBody) throws Exception{
+	public void sendEmail(RabbitMqBody rabbitmqBody){
 		System.out.println("Send email");
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(rabbitmqBody.getToEmailId());
 		mail.setSubject(rabbitmqBody.getSubject());
-//		String userActivationLink = Utility.getUrl(userId);
 		mail.setText(rabbitmqBody.getUrl());
-		System.out.println("Message is ready");
+		System.out.println(environment.getProperty("status.email.ready"));
 		javaMailSender.send(mail);
-		System.out.println("Message is sent");
+		System.out.println(environment.getProperty("status.email.sent"));
 	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 //		System.out.println("Send email");
 //		SimpleMailMessage mail = new SimpleMailMessage();
 //	//	rabitMqBody.setToEmailId(user.getEmail());

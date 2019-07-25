@@ -1,6 +1,6 @@
 package com.bridgelabz.fundoo.user.controller;
 
-import javax.mail.MessagingException;
+//import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 //import javax.servlet.http.HttpServletResponse;
@@ -38,15 +38,17 @@ import com.bridgelabz.fundoo.user.service.UserServices;
 import com.bridgelabz.fundoo.util.EmailUtil;
 import com.bridgelabz.fundoo.util.UserToken;
 
-//@CrossOrigin(origins="http://localhost:4200")
-//@RequestMapping("/user")
+import io.swagger.annotations.ApiOperation;
+
+
+@RequestMapping("/user")
 @RestController
 @PropertySource("classpath:message.properties")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = {"jwtToken"})
 public class UserController {
 	
-	static final Logger logger=LoggerFactory.getLogger(UserController.class);
+	static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	public Environment environment;
@@ -54,8 +56,9 @@ public class UserController {
 	@Autowired
 	private UserServices userServices;
 	
-	@PostMapping("/register")
-	public ResponseEntity<Response> register(@Valid @RequestBody UserDTO userDTO/*BindingResult bindingResult*/) throws MessagingException, Exception//UserException
+	@PostMapping
+	@ApiOperation(value = "Api of register for new user")
+	public ResponseEntity<Response> register(@Valid @RequestBody UserDTO userDTO/*BindingResult bindingResult*/)
 	{
 		logger.info("userDTO:"+userDTO);
 		logger.trace("User Registration");
@@ -64,18 +67,20 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Response> login(@Valid @RequestBody LoginDTO loginDTO) throws Exception
+	@ApiOperation(value = "Api of login for user")
+	public ResponseEntity<Response> login(@Valid @RequestBody LoginDTO loginDTO)
 	{
 		logger.info("loginDTO:"+loginDTO);
 		logger.trace("Login");
-		boolean flag = false;
+		//boolean flag = false;
 		Response response = userServices.login(loginDTO);
-		System.out.println(response.getStatusCode());
+		logger.info("Response:"+response);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/user/{token}")
-	public String emailValidation(@PathVariable String token) throws Exception
+	@GetMapping("/{token}")
+	@ApiOperation(value = "Api of email verification")
+	public String emailValidation(@PathVariable String token)
 	{
 		logger.info("Token:"+token);
 		String result = userServices.validateEmailId(token);
@@ -83,7 +88,8 @@ public class UserController {
 	}
 
 	@PostMapping("/forgotPassword")
-	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) throws Exception
+	@ApiOperation(value = "Api of forgot password")
+	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email)
 	{
 		logger.info("email:"+email);
 		logger.trace("Forgot Password");
@@ -92,8 +98,9 @@ public class UserController {
 //		return new ResponseEntity<String>("Change your password", HttpStatus.OK);
 	}
 	
-	@PutMapping("/user/{token}")
-	public ResponseEntity<Response> resetPassword(@RequestParam("password") String password, @PathVariable String token) throws Exception
+	@PutMapping("/{token}")
+	@ApiOperation(value = "Api of reset password for password change")
+	public ResponseEntity<Response> resetPassword(@RequestParam("password") String password, @PathVariable String token)
 	{
 		logger.info("token:"+token);
 		logger.info("password:"+password);
@@ -103,14 +110,16 @@ public class UserController {
 	}
 	
 	@PostMapping("/imageUpload")
-	public ResponseEntity<Response> saveImage(@RequestHeader("token") String token,@RequestParam("file") MultipartFile file) throws Exception{
+	@ApiOperation(value = "Api of save image")
+	public ResponseEntity<Response> saveImage(@RequestHeader("token") String token,@RequestParam("file") MultipartFile file){
 		logger.info("Token:"+token);
 		Response response = userServices.saveProfileImage(token, file);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getImage/{token}")
-	public ResponseEntity<Resource> getProfilePicture(@PathVariable String token) throws Exception{
+	@ApiOperation(value = "Api of get image")
+	public ResponseEntity<Resource> getProfilePicture(@PathVariable String token) {
 		logger.info("Token:"+token);
 		Resource response = userServices.getImage(token);
 		return new ResponseEntity<Resource>(response, HttpStatus.OK);
@@ -131,7 +140,7 @@ public class UserController {
 
 
 
-
+//@CrossOrigin(origins="http://localhost:4200")
 
 //if(bindingResult.hasErrors()) 
 //{

@@ -47,7 +47,7 @@ public class LabelServiceImplimentation implements LabelService{
 	private Environment environment;
 
 	@Override
-	public Response createLabel(LabelDto labelDto, String token) throws Exception {
+	public Response createLabel(LabelDto labelDto, String token) {
 		logger.info("labelDto"+labelDto);
 		logger.info("Token"+token);
 		Long userId = UserToken.tokenVerify(token);
@@ -62,7 +62,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 
 	@Override
-	public Response deleteLabel(Long labelId, String token) throws Exception {
+	public Response deleteLabel(Long labelId, String token) {
 		logger.info("labelId"+labelId);
 		logger.info("Token"+token);
 		Long userId = UserToken.tokenVerify(token);
@@ -80,7 +80,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 	
 	@Override
-	public List<Label> getAllLabels(String token) throws Exception {
+	public List<Label> getAllLabels(String token) {
 		logger.info("Token"+token);
 		Long userId = UserToken.tokenVerify(token);
 		List<Label> allLabels = labelRepository.findAll();
@@ -94,7 +94,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 	
 	@Override
-	public Response updateLabel(String token, Long labelId, LabelDto labelDto) throws Exception {
+	public Response updateLabel(String token, Long labelId, LabelDto labelDto) {
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Label> label = labelRepository.findById(labelId);
 		if(label.get().getUser().getUserId() == userId) {
@@ -136,7 +136,7 @@ public class LabelServiceImplimentation implements LabelService{
 	
 
 	@Override
-	public Response addLabelInNote(String token, Long labelId, Long noteId) throws Exception {
+	public Response addLabelInNote(String token, Long labelId, Long noteId) {
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Label> label = labelRepository.findById(labelId);
 		Optional<Note> note = noteRepository.findById(noteId);
@@ -153,7 +153,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 
 	@Override
-	public Response deleteLabelFromNote(String token, Long labelId, Long noteId) throws Exception {
+	public Response deleteLabelFromNote(String token, Long labelId, Long noteId) {
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Label> label = labelRepository.findById(labelId);
 		Optional<Note> note = noteRepository.findById(noteId);
@@ -169,7 +169,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 
 	@Override
-	public Set<Label> getLabelOfNote(String token, Long noteId) throws Exception {
+	public Set<Label> getLabelOfNote(String token, Long noteId) {
 		logger.info("getLabelOfNote");
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Note> note = noteRepository.findById(noteId);
@@ -179,7 +179,7 @@ public class LabelServiceImplimentation implements LabelService{
 	}
 
 	@Override
-	public List<Note> getNoteOfLabel(String token, Long labelId) throws Exception {
+	public List<Note> getNoteOfLabel(String token, Long labelId){
 		logger.info("getNoteOfLabel");
 		Long userId = UserToken.tokenVerify(token);
 		Optional<Label> label = labelRepository.findById(labelId);

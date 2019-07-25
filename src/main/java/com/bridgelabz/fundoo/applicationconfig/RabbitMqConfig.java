@@ -11,7 +11,6 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.bridgelabz.fundoo.RabbitMq.MessageListener;
 
 
@@ -35,6 +34,11 @@ public class RabbitMqConfig {
 	 Queue queue() {
 		 return new Queue(USER_QUEUE_KEY, true);
 	 }
+	 
+//	 @Bean(name="userQueue")
+//	 Queue queue() {
+//		 return new Queue(USER_ROUTING_KEY, true);
+//	 }
 
 	 @Bean
 	 TopicExchange exchange() {
@@ -55,6 +59,11 @@ public class RabbitMqConfig {
 	 Queue noteQueue() {
 		 return new Queue(NOTE_QUEUE_KEY, true);
 	 }
+	 
+//	 @Bean(name="noteQueue")
+//	 Queue noteQueue() {
+//		 return new Queue(NOTE_ROUTING_KEY, true);
+//	 }
 
 	 @Bean
 	 Binding noteBinding(Queue noteQueue, TopicExchange exchange) {
@@ -62,6 +71,7 @@ public class RabbitMqConfig {
 	 }
 	 
 //	 For RabbitMQ listener
+	 
 	 @Bean
 	 SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 	  SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();

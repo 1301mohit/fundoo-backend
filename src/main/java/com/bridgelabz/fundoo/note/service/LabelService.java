@@ -12,12 +12,12 @@ import com.bridgelabz.fundoo.response.Response;
 
 
 public interface LabelService {
-	public Response createLabel(LabelDto labelDto, String token) throws Exception;
-	public Response deleteLabel(Long labelId, String token) throws Exception;
-	public List<Label> getAllLabels(String token) throws Exception;
-	public Response updateLabel(String token, Long labelId, LabelDto labelDto) throws Exception;
-	public Response addLabelInNote(String token, Long labelId, Long noteId)  throws Exception;
-	public Response deleteLabelFromNote(String token, Long labelId, Long noteId) throws Exception;
-	public Set<Label> getLabelOfNote(String token, Long noteId) throws Exception;
-	public List<Note> getNoteOfLabel(String token, Long labelId) throws Exception;
+	public Response createLabel(LabelDto labelDto, String token);
+	public Response deleteLabel(Long labelId, String token);
+	public List<Label> getAllLabels(String token);
+	public Response updateLabel(String token, Long labelId, LabelDto labelDto);
+	public Response addLabelInNote(String token, Long labelId, Long noteId);
+	public Response deleteLabelFromNote(String token, Long labelId, Long noteId);
+	public Set<Label> getLabelOfNote(String token, Long noteId);
+	public List<Note> getNoteOfLabel(String token, Long labelId);
 }

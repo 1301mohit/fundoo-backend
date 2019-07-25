@@ -2,7 +2,6 @@ package com.bridgelabz.fundoo.user.model;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +12,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-
 import com.bridgelabz.fundoo.note.model.Note;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -54,21 +52,10 @@ public class User{
 	
 	private String profileImage;
 	
-//	@ManyToMany
-//	@JoinTable(name = "collaborate_user",
-//	   joinColumns = { @JoinColumn(name = "user_id")},
-//	   inverseJoinColumns = { @JoinColumn(name = "note_id")})
-//	private Set<Note> collaboratedNote;
 	@ManyToMany(mappedBy="collaboratedUser")
 	@JsonIgnore
 	private Set<Note> collaboratedNote;
 
-	
-//	@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
-//	@JoinColumn(name="use_id")//,referencedColumnName="userId")
-//	private List<Note> notes;
-	
-	
 	public User() 
 	{
 		
@@ -160,19 +147,13 @@ public class User{
 		this.profileImage = profileImage;
 	}
 
-	
-//	public List<Note> getNotes() {
-//		return notes;
-//	}
-//
-//	public void setNotes(List<Note> notes) {
-//		this.notes = notes;
-//	}
-	
-	
-	
-	
 }
+
+
+
+
+
+
 
 
 
@@ -189,3 +170,23 @@ public class User{
 //				+ ", mobileNumber=" + mobileNumber + ", password=" + password + ", isVerification=" + isVerification
 //				+ "]";
 //	}
+
+
+//@ManyToMany
+//@JoinTable(name = "collaborate_user",
+//   joinColumns = { @JoinColumn(name = "user_id")},
+//   inverseJoinColumns = { @JoinColumn(name = "note_id")})
+//private Set<Note> collaboratedNote;
+
+
+//@OneToMany(targetEntity=Note.class,cascade=CascadeType.ALL) //fetch=FetchType.LAZY)
+//@JoinColumn(name="use_id")//,referencedColumnName="userId")
+//private List<Note> notes;
+
+//public List<Note> getNotes() {
+//return notes;
+//}
+//
+//public void setNotes(List<Note> notes) {
+//this.notes = notes;
+//}

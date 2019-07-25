@@ -2,16 +2,13 @@ package com.bridgelabz.fundoo.response;
 
 import org.springframework.stereotype.Component;
 
-//
-//@Getter
-//@Setter
-//@ToString
 @Component
 public class Response {
 	
 	private String statusMessage;
 	private String statusCode;
 	private String token;
+	
 	
 	public String getStatusMessage() {
 		return statusMessage;

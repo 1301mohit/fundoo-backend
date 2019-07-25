@@ -36,7 +36,7 @@ public class LabelController {
 	private LabelService labelService;
 	
 	@PostMapping("/createLabel")
-	public ResponseEntity<Response> createLabel(@RequestBody LabelDto labelDto, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> createLabel(@RequestBody LabelDto labelDto, @RequestHeader("token") String token) {
 		logger.info("labelDto"+labelDto);
 		logger.info("Token"+token);
 		logger.trace("Create label");
@@ -45,7 +45,7 @@ public class LabelController {
 	}
 	
 	@DeleteMapping("/deleteLabel/{labelId}")
-	public ResponseEntity<Response> deleteLabel(@PathVariable Long labelId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> deleteLabel(@PathVariable Long labelId, @RequestHeader("token") String token) {
 		logger.info("labelId"+labelId);
 		logger.info("Token"+token);
 		Response response = labelService.deleteLabel(labelId, token);
@@ -53,14 +53,14 @@ public class LabelController {
 	}
 	
 	@GetMapping("/getAllLabels")
-	public ResponseEntity<List<Label>> getAllLabels(@RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<List<Label>> getAllLabels(@RequestHeader("token") String token) {
 		logger.info("Token"+token);
 		List<Label> labels = labelService.getAllLabels(token);
 		return new ResponseEntity<>(labels, HttpStatus.OK);
 	}
 	
 	@PostMapping("/updateLabel/{labelId}")
-	public ResponseEntity<Response> updateLabel(@RequestHeader("token") String token, @PathVariable Long labelId, @RequestBody LabelDto labelDto) throws Exception{
+	public ResponseEntity<Response> updateLabel(@RequestHeader("token") String token, @PathVariable Long labelId, @RequestBody LabelDto labelDto) {
 		logger.info("Token"+token);
 		logger.info("LabelId"+labelId);
 		logger.info("LabelDto"+labelDto);
@@ -69,7 +69,7 @@ public class LabelController {
 	}
 	
 	@PostMapping("/addLabelInNote/{labelId}/{noteId}")
-	public ResponseEntity<Response> addLabelInNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) throws Exception{
+	public ResponseEntity<Response> addLabelInNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) {
 		logger.info("Add label for note");
 		logger.info("Token"+token);
 		logger.info("LabelId"+labelId);
@@ -80,7 +80,7 @@ public class LabelController {
 	}
 	
 	@DeleteMapping("/deleteLabelOfNote/{labelId}/{noteId}")
-	public ResponseEntity<Response> deleteLabelFormNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) throws Exception{
+	public ResponseEntity<Response> deleteLabelFormNote(@RequestHeader("token") String token, @PathVariable Long labelId, @PathVariable Long noteId) {
 		logger.info("Delete label from note");
 		logger.info("Token"+token);
 		logger.info("LabelId"+labelId);
@@ -90,7 +90,7 @@ public class LabelController {
 	}
 	
 	@GetMapping("/getLabelOfNote/{noteId}")
-	public ResponseEntity<Set<Label>> getLabelOfNote(@RequestHeader("token") String token, @PathVariable Long noteId) throws Exception{
+	public ResponseEntity<Set<Label>> getLabelOfNote(@RequestHeader("token") String token, @PathVariable Long noteId) {
 		logger.info("Get label of note");
 		logger.info("Token"+token);
 		logger.info("NoteId"+noteId);
@@ -99,7 +99,7 @@ public class LabelController {
 	}
 	
 	@GetMapping("/getNoteOfLabel/{labelId}")
-	public ResponseEntity<List<Note>> getNoteOfLabel(@RequestHeader("token") String token, @PathVariable Long labelId) throws Exception{
+	public ResponseEntity<List<Note>> getNoteOfLabel(@RequestHeader("token") String token, @PathVariable Long labelId) {
 		logger.info("Get note of Label");
 		logger.info("Token"+token);
 		logger.info("LabelId"+labelId);

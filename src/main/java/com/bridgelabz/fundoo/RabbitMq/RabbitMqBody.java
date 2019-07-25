@@ -5,18 +5,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMqBody {
 
-	//private String fromEmailId;
 	private String toEmailId;
 	private String url;
 	private String subject;
 	
 	
-//	public String getFromEmailId() {
-//		return fromEmailId;
-//	}
-//	public void setFromEmailId(String fromEmailId) {
-//		this.fromEmailId = fromEmailId;
-//	}
 	public String getToEmailId() {
 		return toEmailId;
 	}
@@ -41,7 +34,6 @@ public class RabbitMqBody {
 	
 	public RabbitMqBody(String fromEmailId, String toEmailId, String url, String subject) {
 		super();
-//		this.fromEmailId = fromEmailId;
 		this.toEmailId = toEmailId;
 		this.url = url;
 		this.subject = subject;
@@ -52,24 +44,5 @@ public class RabbitMqBody {
 	public String toString() {
 		return "RabbitMqBody [toEmailId=" + toEmailId + ", url=" + url + ", subject=" + subject + "]";
 	}
-	
-	
-//	@Override
-//	public String toString() {
-//		return "RabbitMqBody [fromEmailId=" + fromEmailId + ", toEmailId=" + toEmailId + ", url=" + url + ", subject="
-//				+ subject + "]";
-//	}
-	
-//	public RabbitMqBody(String emailId, String url, String subject) {
-//		super();
-//		this.emailId = emailId;
-//		this.url = url;
-//		this.subject = subject;
-//	}
-//	
-//	@Override
-//	public String toString() {
-//		return "RabbitMqBody [emailId=" + emailId + ", url=" + url + ", subject=" + subject + "]";
-//	}
 	
 }

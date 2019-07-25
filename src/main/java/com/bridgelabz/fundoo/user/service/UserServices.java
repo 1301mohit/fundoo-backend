@@ -12,14 +12,15 @@ import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
 
+
 public interface UserServices {
 	
-	public Response register(UserDTO userDTO) throws MessagingException, Exception;
-	public Response login(LoginDTO loginuser) throws Exception;
-	public String validateEmailId(String token) throws Exception; 
-	public Response forgotPassword(String email) throws Exception;
-	public Response resetPassword(String token, String password) throws Exception;
-	public Response saveProfileImage(String token, MultipartFile file) throws Exception;
-	public Resource getImage(String token) throws Exception;
+	public Response register(UserDTO userDTO);
+	public Response login(LoginDTO loginuser);
+	public String validateEmailId(String token); 
+	public Response forgotPassword(String email);
+	public Response resetPassword(String token, String password);
+	public Response saveProfileImage(String token, MultipartFile file);
+	public Resource getImage(String token);
 	
 }

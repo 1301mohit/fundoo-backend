@@ -50,7 +50,7 @@ public class NoteController {
 	static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 	
 	@PostMapping("/addNote")
-	public ResponseEntity<Response> addNote(@RequestBody NoteDto noteDto, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> addNote(@RequestBody NoteDto noteDto, @RequestHeader("token") String token){
 		System.out.println("create");
 		logger.info("noteDto:"+noteDto);
 		logger.trace("Create Note");
@@ -59,7 +59,7 @@ public class NoteController {
 	}
 	
 	@PutMapping("/updateNote/{noteId}")
-	public ResponseEntity<Response> updateNote(@PathVariable Long noteId, @RequestBody NoteDto noteDto, @RequestHeader("token") String token) throws Exception {
+	public ResponseEntity<Response> updateNote(@PathVariable Long noteId, @RequestBody NoteDto noteDto, @RequestHeader("token") String token) {
 		logger.info("noteId:"+noteId);
 		logger.info("Token:"+token);
 		logger.trace("Update Note");
@@ -68,7 +68,7 @@ public class NoteController {
 	}
 	
 	@DeleteMapping("/deleteNote/{noteId}")
-	public ResponseEntity<Response> deleteNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> deleteNote(@PathVariable Long noteId, @RequestHeader("token") String token) {
 		logger.info("NoteId:"+noteId);
 		logger.trace("Delete note");
 		Response response = noteServices.deleteNote(noteId,token);
@@ -76,7 +76,7 @@ public class NoteController {
 	}
 	
 	@PutMapping("/pinNote/{noteId}")
-	public ResponseEntity<Response> pinNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> pinNote(@PathVariable Long noteId, @RequestHeader("token") String token){
 		logger.info("NoteId:"+noteId);
 		logger.info("Token:"+token);
 		Response response = noteServices.pinNote(noteId, token);
@@ -84,7 +84,7 @@ public class NoteController {
 	}
 	
 	@PutMapping("/archiveNote/{noteId}")
-	public ResponseEntity<Response> archiveNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> archiveNote(@PathVariable Long noteId, @RequestHeader("token") String token) {
 		logger.info("NoteId:"+noteId);
 		logger.info("Token:"+token);
 		Response response = noteServices.archiveNote(noteId, token);
@@ -92,7 +92,7 @@ public class NoteController {
 	}
 	
 	@GetMapping("/getAllNotes")
-	public ResponseEntity<List<Note>> getAllNotes(@RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<List<Note>> getAllNotes(@RequestHeader("token") String token) {
 		logger.info("Token:"+token);
 		logger.info("Get all notes");
 		List<Note> listOfNotes = noteServices.getAllNotes(token);
@@ -101,7 +101,7 @@ public class NoteController {
 	}
 	
 	@PostMapping("/color/{noteId}")
-	public ResponseEntity<Response> colorOfNote(@PathVariable Long noteId,@RequestParam String color,@RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> colorOfNote(@PathVariable Long noteId,@RequestParam String color,@RequestHeader("token") String token) {
 		logger.info("Token:"+token);
 		logger.info("Color is"+color);
 		logger.info("NoteId is "+noteId);
@@ -111,7 +111,7 @@ public class NoteController {
 	}
 	
 	@PostMapping("/restoreNote/{noteId}")
-	public ResponseEntity<Response> restoreNote(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> restoreNote(@PathVariable Long noteId, @RequestHeader("token") String token) {
 		logger.info("Token:"+token);
 		logger.info("NoteId"+noteId);
 		Response response = noteServices.restoreNote(noteId, token);
@@ -119,7 +119,7 @@ public class NoteController {
 	}
 	
 	@PostMapping("/addRemainder/{noteId}")
-	public ResponseEntity<Response> remainder(@PathVariable Long noteId, @RequestHeader("token") String token, @RequestParam String date) throws Exception{
+	public ResponseEntity<Response> remainder(@PathVariable Long noteId, @RequestHeader("token") String token, @RequestParam String date) {
 		logger.info("Token:"+token);
 		logger.info("Date"+date);
 		logger.info("NoteId"+noteId); 
@@ -128,7 +128,7 @@ public class NoteController {
 	}
 	
 	@DeleteMapping("/deleteRemainder/{noteId}")
-	public ResponseEntity<Response> removeRemainder(@PathVariable Long noteId, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> removeRemainder(@PathVariable Long noteId, @RequestHeader("token") String token) {
 		logger.info("Token:"+token);
 		logger.info("NoteId",+noteId);
 		Response response = noteServices.removeRemainder(noteId,token);
@@ -136,7 +136,7 @@ public class NoteController {
 	}
 	
 	@PostMapping("/addCollaborator/{noteId}")
-	public ResponseEntity<Response> addCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> addCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) {
 		logger.info("Token"+token);
 		logger.info("NoteId"+noteId);
 		logger.info("Email"+email);
@@ -145,7 +145,7 @@ public class NoteController {
 	}
 	
 	@DeleteMapping("/removeCollaborator/{noteId}")
-	public ResponseEntity<Response> removeCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Response> removeCollaborator(@PathVariable Long noteId, @RequestParam String email, @RequestHeader("token") String token) {
 		logger.info("Remove Collaborator");
 		logger.info("Token"+token);
 		logger.info("Email"+email);
@@ -155,7 +155,7 @@ public class NoteController {
 	}
 	
 	@GetMapping("/getAllCollaborator")
-	public ResponseEntity<Set<User>> getAllCollaborator(@RequestParam Long noteId,@RequestHeader("token") String token) throws Exception{
+	public ResponseEntity<Set<User>> getAllCollaborator(@RequestParam Long noteId,@RequestHeader("token") String token) {
 		logger.info("Get all collaborator");
 		logger.info("Token"+token);
 		Set<User> listOfUser = noteServices.getAllCollaborator(noteId,token);
@@ -163,7 +163,7 @@ public class NoteController {
 	}
 	
 	@GetMapping("/getAllListOfNotes")
-	public ResponseEntity<List<Note>> getAllListOfNotes(@RequestHeader("token") String token, @RequestParam String isArchive, @RequestParam String isTrash) throws Exception{
+	public ResponseEntity<List<Note>> getAllListOfNotes(@RequestHeader("token") String token, @RequestParam String isArchive, @RequestParam String isTrash) {
 		logger.info("Get all list of notes");
 		logger.info("Token:"+token);
 		logger.info("Archive:"+isArchive);
@@ -173,7 +173,7 @@ public class NoteController {
 	}
 	
 	@GetMapping("/getAllSearchNotes")
-	public ResponseEntity<List<Note>> getAllSearchNotes(@RequestHeader("token") String token, @RequestParam String query) throws Exception{
+	public ResponseEntity<List<Note>> getAllSearchNotes(@RequestHeader("token") String token, @RequestParam String query) {
 		logger.info("Get all Search Notes");
 		logger.info("Token:"+token);
 		logger.info("Query"+query);
